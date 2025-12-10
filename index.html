@@ -178,14 +178,23 @@
 <div class="container">
 
     <div id="view-itinerary" class="view-section active">
-        <div class="card" style="background: linear-gradient(135deg, #7F7FD5 0%, #86A8E7 50%, #91EAE4 100%); color: white; border:none; display:flex; align-items:center; justify-content:space-between; padding:20px;">
-            <div>
-                <div style="font-size:0.85rem; opacity:0.9; letter-spacing:1px;">12月 / 岡山・姬路</div>
-                <div style="font-size:2rem; font-weight:bold; font-family: var(--font-serif);">9°C</div>
+        <div class="card" id="main-weather-card" style="background: linear-gradient(135deg, #7F7FD5 0%, #86A8E7 50%, #91EAE4 100%); color: white; border:none; padding:20px;">
+            <div style="display:flex; align-items:center; justify-content:space-between;">
+                <div>
+                    <div id="weather-loc" style="font-size:0.85rem; opacity:0.9; letter-spacing:1px;">📍 定位中...</div>
+                    <div id="weather-temp" style="font-size:2.5rem; font-weight:bold; font-family: var(--font-serif);">--°C</div>
+                </div>
+                <div style="text-align:right;">
+                    <div id="weather-icon" style="font-size:3rem;">🌤️</div>
+                    <div id="weather-desc" style="font-size:0.9rem;">--</div>
+                </div>
             </div>
-            <div style="text-align:right;">
-                <div style="font-size:2.2rem;">🌤️</div>
-                <div style="font-size:0.8rem;">適合洋蔥式穿搭</div>
+            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.3); display: flex; justify-content: space-between; align-items: center;">
+                <div style="font-size: 0.9rem;">明日天氣</div>
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span id="weather-tomorrow-icon" style="font-size: 1.2rem;"></span>
+                    <span id="weather-tomorrow-temp" style="font-size: 1rem; font-weight: bold;">-- / --°C</span>
+                </div>
             </div>
         </div>
 
@@ -475,17 +484,52 @@
 
     async function fetchWeather(lat, lon) {
         const widget = document.getElementById('weather-widget');
+        // Main Card Elements
+        const locEl = document.getElementById('weather-loc');
+        const tempEl = document.getElementById('weather-temp');
+        const iconEl = document.getElementById('weather-icon');
+        const descEl = document.getElementById('weather-desc');
+        const tomIconEl = document.getElementById('weather-tomorrow-icon');
+        const tomTempEl = document.getElementById('weather-tomorrow-temp');
+
         try {
-            const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&timezone=auto`);
+            // 1. Get Weather (Current + Daily)
+            const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=auto`);
             const data = await res.json();
-            const current = data.current_weather;
             
+            // Current
+            const current = data.current_weather;
             const temp = Math.round(current.temperature);
             const code = current.weathercode;
             const { icon, text } = getWeatherStatus(code);
 
+            // Tomorrow (Index 1)
+            const daily = data.daily;
+            const tomCode = daily.weathercode[1];
+            const tomMax = Math.round(daily.temperature_2m_max[1]);
+            const tomMin = Math.round(daily.temperature_2m_min[1]);
+            const tomStatus = getWeatherStatus(tomCode);
+
+            // Update Header Widget
             widget.innerHTML = `<span>${icon} 現在氣溫 ${temp}°C ${text}</span>`;
             widget.classList.add('visible');
+
+            // Update Main Card
+            if(tempEl) {
+                tempEl.innerText = `${temp}°C`;
+                iconEl.innerText = icon;
+                descEl.innerText = text;
+                tomIconEl.innerText = tomStatus.icon;
+                tomTempEl.innerText = `${tomMin}°C - ${tomMax}°C`;
+            }
+
+            // 2. Get Location Name (Reverse Geocoding)
+            const geoRes = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
+            const geoData = await geoRes.json();
+            const city = geoData.address.city || geoData.address.town || geoData.address.village || geoData.address.county || "未知地點";
+            
+            if(locEl) locEl.innerText = `📍 ${city}`;
+            
         } catch (e) {
             console.error("Weather API Error:", e);
             widget.innerHTML = "<span>⚠️ 天氣資訊暫時無法使用</span>";
