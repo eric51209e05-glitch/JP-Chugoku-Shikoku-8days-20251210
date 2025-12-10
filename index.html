@@ -3,55 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>書寫山・巡禮帖 | 8日周遊</title>
+    <title>書寫山・巡禮帖 | 8日周遊 (完整版)</title>
     <style>
         /* --- 視覺風格設定 (圓教寺・書寫山氛圍) --- */
         :root {
-            /* 色調：取自圓教寺的巨木、青苔與白牆 */
             --c-bg: #f4f1ea; /* 和紙白 */
             --c-text: #2c2825; /* 墨黑 */
-            --c-primary: #5c6e58; /* 苔綠 (圓教寺森林) */
+            --c-primary: #5c6e58; /* 苔綠 */
             --c-primary-dark: #3a4a36;
-            --c-accent: #a63737; /* 朱印紅 (強調色) */
+            --c-accent: #a63737; /* 朱印紅 */
             --c-wood: #8c7b6c; /* 古木色 */
             --c-light: #e8e4dc;
             --c-white: #ffffff;
             --shadow: 0 4px 12px rgba(44, 40, 37, 0.08);
             --radius: 12px;
-            --font-main: "Helvetica Neue", Helvetica, "PingFang TC", "Hiragino Sans GB", "Microsoft JhengHei", sans-serif;
-            --font-serif: "Songti TC", "Noto Serif TC", serif; /* 標題用襯線體 */
+            --font-main: "Helvetica Neue", Helvetica, "PingFang TC", "Microsoft JhengHei", sans-serif;
+            --font-serif: "Songti TC", "Noto Serif TC", serif;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body {
-            margin: 0;
-            padding: 0;
+            margin: 0; padding: 0;
             font-family: var(--font-main);
             background-color: var(--c-bg);
             color: var(--c-text);
-            line-height: 1.6;
-            padding-bottom: 80px; /* 給底部導航留空間 */
+            padding-bottom: 90px; /* 避開底部導航 */
         }
 
-        h1, h2, h3 { font-family: var(--font-serif); font-weight: 600; margin: 0; }
-
-        /* --- UI 元件 --- */
-        .container { max-width: 600px; margin: 0 auto; padding: 16px; }
-        
-        /* 頂部標題 */
+        /* 標題區 */
         header {
-            text-align: center;
-            padding: 20px 0;
+            text-align: center; padding: 20px 0;
             background: linear-gradient(to bottom, var(--c-bg), rgba(244,241,234,0));
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            position: sticky; top: 0; z-index: 100;
             backdrop-filter: blur(5px);
         }
-        header h1 { font-size: 1.5rem; letter-spacing: 2px; color: var(--c-primary-dark); }
-        header p { font-size: 0.8rem; color: var(--c-wood); letter-spacing: 1px; margin-top: 4px; }
+        header h1 { font-family: var(--font-serif); font-size: 1.6rem; color: var(--c-primary-dark); margin: 0; }
+        header p { font-size: 0.85rem; color: var(--c-wood); margin-top: 4px; letter-spacing: 1px; }
 
-        /* 卡片風格 */
+        .container { max-width: 600px; margin: 0 auto; padding: 0 16px; }
+
+        /* 卡片通用 */
         .card {
             background: var(--c-white);
             border-radius: var(--radius);
@@ -59,230 +50,139 @@
             margin-bottom: 16px;
             box-shadow: var(--shadow);
             border-left: 4px solid var(--c-primary);
-            position: relative;
-            transition: transform 0.2s;
         }
-        .card.edit-mode { border-style: dashed; border-color: var(--c-wood); }
 
         /* 按鈕 */
         .btn {
-            background: var(--c-primary);
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
+            background: var(--c-primary); color: white; border: none;
+            padding: 8px 16px; border-radius: 20px; cursor: pointer;
+            font-size: 0.9rem; transition: 0.2s;
         }
-        .btn-outline { background: transparent; border: 1px solid var(--c-primary); color: var(--c-primary); }
-        .btn-danger { background: var(--c-accent); }
-        .btn-sm { padding: 4px 10px; font-size: 0.8rem; }
-
-        /* 底部導航 */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: var(--c-primary-dark);
-            display: flex;
-            justify-content: space-around;
-            padding: 12px 0;
-            z-index: 999;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-        }
-        .nav-item {
-            color: rgba(255,255,255,0.6);
-            text-align: center;
-            font-size: 0.75rem;
-            cursor: pointer;
-            flex: 1;
-        }
-        .nav-item.active { color: var(--c-white); font-weight: bold; }
-        .nav-icon { display: block; font-size: 1.2rem; margin-bottom: 4px; }
-
-        /* --- 頁面切換邏輯 --- */
-        .view-section { display: none; animation: fadeIn 0.3s; }
-        .view-section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .btn:active { transform: scale(0.98); }
 
         /* --- 1. 行程表樣式 --- */
         .day-header {
-            background: var(--c-wood);
-            color: white;
-            padding: 10px 16px;
-            border-radius: var(--radius);
-            margin-bottom: 10px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            cursor: pointer;
+            background: var(--c-wood); color: white;
+            padding: 12px 16px; border-radius: var(--radius);
+            margin-bottom: 10px; cursor: pointer;
+            display: flex; justify-content: space-between; align-items: center;
         }
-        .day-details { display: none; padding-left: 8px; border-left: 1px dashed var(--c-wood); margin-left: 10px; }
-        .day-details.open { display: block; }
+        .day-details { display: none; padding: 8px 0 8px 12px; border-left: 2px dashed var(--c-light); margin-left: 10px; }
+        .day-details.open { display: block; animation: slideDown 0.3s ease-out; }
         
-        .timeline-item {
-            position: relative;
-            padding-left: 20px;
-            margin-bottom: 12px;
-        }
+        .timeline-item { position: relative; padding-left: 24px; margin-bottom: 16px; }
         .timeline-item::before {
-            content: '';
-            position: absolute;
-            left: -5px;
-            top: 6px;
-            width: 10px;
-            height: 10px;
-            background: var(--c-accent);
-            border-radius: 50%;
+            content: ''; position: absolute; left: -5px; top: 6px;
+            width: 12px; height: 12px; background: var(--c-accent); border-radius: 50%; border: 2px solid var(--c-white);
         }
         .time-badge {
-            font-size: 0.75rem;
-            background: var(--c-light);
-            color: var(--c-text);
-            padding: 2px 6px;
-            border-radius: 4px;
-            margin-right: 6px;
-            font-weight: bold;
+            font-size: 0.75rem; background: var(--c-primary-dark); color: white;
+            padding: 2px 8px; border-radius: 4px; margin-right: 6px; font-weight: bold; vertical-align: middle;
         }
-        .drag-handle { float: right; color: #ccc; cursor: grab; }
 
-        /* --- 2. 探索 (地圖) 樣式 --- */
+        /* --- 2. 地圖探索樣式 --- */
         #map { width: 100%; height: 50vh; border-radius: var(--radius); margin-bottom: 16px; background: #eee; }
-        .category-scroll {
-            display: flex;
-            overflow-x: auto;
-            gap: 10px;
-            padding-bottom: 10px;
-            margin-bottom: 10px;
-        }
-        .category-scroll::-webkit-scrollbar { display: none; }
+        
+        .category-scroll { display: flex; overflow-x: auto; gap: 8px; padding-bottom: 10px; margin-bottom: 10px; }
         .pill-btn {
-            white-space: nowrap;
-            padding: 6px 14px;
-            border-radius: 20px;
-            background: var(--c-white);
-            border: 1px solid var(--c-wood);
-            color: var(--c-text);
-            font-size: 0.9rem;
-            transition: all 0.2s;
+            white-space: nowrap; padding: 8px 16px; border-radius: 20px;
+            background: var(--c-white); border: 1px solid var(--c-wood);
+            color: var(--c-text); font-size: 0.9rem; transition: 0.2s; cursor: pointer;
         }
         .pill-btn.active { background: var(--c-primary); color: white; border-color: var(--c-primary); }
         
-        .sub-cats { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
-        .sub-pill {
-            background: var(--c-light);
-            font-size: 0.8rem;
-            padding: 4px 10px;
-            border-radius: 12px;
-            cursor: pointer;
-        }
-        
-        /* 爸媽視角卡片 */
+        .sub-cats { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
+        .sub-pill { font-size: 0.8rem; background: #e0e0e0; padding: 4px 10px; border-radius: 12px; cursor: pointer; color: #555; }
+
         .place-card {
-            background: white;
-            padding: 12px;
-            margin-bottom: 10px;
-            border-radius: 8px;
-            border-left: 4px solid var(--c-accent);
+            background: white; padding: 12px; margin-bottom: 10px;
+            border-radius: 8px; border-left: 4px solid var(--c-accent); box-shadow: var(--shadow);
         }
         .ai-tip {
-            background: #fff3cd;
-            color: #856404;
-            font-size: 0.8rem;
-            padding: 6px;
-            margin-top: 6px;
-            border-radius: 4px;
-            display: flex;
-            align-items: flex-start;
+            background: #fff8e1; color: #856404; font-size: 0.85rem;
+            padding: 8px; margin-top: 8px; border-radius: 6px; line-height: 1.4; display: flex; align-items: start;
         }
         .ai-tip::before { content: '💡'; margin-right: 6px; }
 
         /* --- 3. 記帳樣式 --- */
-        .expense-row { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #eee; }
-        .total-box { background: var(--c-wood); color: white; padding: 16px; border-radius: var(--radius); text-align: right; font-size: 1.2rem; margin-bottom: 20px; }
-
-        /* --- 天氣 Widget --- */
-        .weather-widget {
-            display: flex;
-            background: linear-gradient(135deg, #a8c0ff 0%, #3f2b96 100%);
-            color: white;
-            padding: 10px;
-            border-radius: var(--radius);
-            margin-bottom: 16px;
-            align-items: center;
-            justify-content: space-around;
+        .total-box {
+            background: var(--c-primary-dark); color: white;
+            padding: 20px; border-radius: var(--radius);
+            text-align: right; margin-bottom: 20px;
         }
-        .weather-icon { font-size: 2rem; }
+        .expense-item { display: flex; justify-content: space-between; border-bottom: 1px solid #eee; padding: 10px 0; }
+        input { padding: 10px; border: 1px solid #ddd; border-radius: 6px; width: 100%; }
+
+        /* 底部導航 & 切換動畫 */
+        .bottom-nav {
+            position: fixed; bottom: 0; left: 0; width: 100%;
+            background: var(--c-white); border-top: 1px solid #eee;
+            display: flex; justify-content: space-around; padding: 10px 0; z-index: 999;
+        }
+        .nav-item { text-align: center; color: #999; font-size: 0.7rem; flex: 1; cursor: pointer; }
+        .nav-item.active { color: var(--c-primary); font-weight: bold; }
+        .nav-icon { display: block; font-size: 1.4rem; margin-bottom: 2px; }
+
+        .view-section { display: none; opacity: 0; transition: opacity 0.3s; }
+        .view-section.active { display: block; opacity: 1; }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
 <header>
-    <h1>山河・巡禮</h1>
+    <h1>書寫山・巡禮帖</h1>
     <p>中國四國 × 圓教寺 8日紀行</p>
 </header>
 
 <div class="container">
-    
+
     <div id="view-itinerary" class="view-section active">
-        <div class="weather-widget">
+        <div class="card" style="background: linear-gradient(135deg, #a8c0ff 0%, #3f2b96 100%); color: white; border:none; display:flex; align-items:center; justify-content:space-between;">
             <div>
-                <div style="font-size:0.8rem; opacity:0.8;">岡山 / 姬路 (12月)</div>
-                <div style="font-weight:bold; font-size:1.4rem;">9°C</div>
+                <div style="font-size:0.9rem; opacity:0.8;">12月 / 岡山・姬路</div>
+                <div style="font-size:1.8rem; font-weight:bold;">9°C</div>
             </div>
-            <div class="weather-icon">☁️</div>
-            <div style="font-size:0.8rem; text-align:right;">
-                <div>降雨機率: 20%</div>
-                <div>適合洋蔥式穿搭</div>
+            <div style="text-align:right;">
+                <div style="font-size:2rem;">☁️</div>
+                <div style="font-size:0.8rem;">適合洋蔥式穿搭</div>
             </div>
         </div>
 
-        <div style="display:flex; justify-content:flex-end; margin-bottom:10px;">
-            <button class="btn btn-sm btn-outline" onclick="toggleEditMode()" id="editBtn">✎ 編輯行程</button>
-        </div>
-
-        <div id="itinerary-list">
-            </div>
+        <div id="itinerary-list"></div>
     </div>
 
     <div id="view-explore" class="view-section">
-        <div class="category-scroll" id="main-cats">
-            <button class="pill-btn active" onclick="selectCategory('play')">玩樂</button>
-            <button class="pill-btn" onclick="selectCategory('food')">美食</button>
-            <button class="pill-btn" onclick="selectCategory('health')">健康</button>
-            <button class="pill-btn" onclick="selectCategory('convenience')">便利</button>
+        <div class="category-scroll">
+            <button class="pill-btn active" onclick="selectMainCat('play', this)">玩樂</button>
+            <button class="pill-btn" onclick="selectMainCat('food', this)">美食</button>
+            <button class="pill-btn" onclick="selectMainCat('health', this)">健康</button>
+            <button class="pill-btn" onclick="selectMainCat('conv', this)">便利</button>
         </div>
-        <div class="sub-cats" id="sub-cats">
-            </div>
+        <div class="sub-cats" id="sub-cats-container"></div>
 
         <div id="map"></div>
         <div id="places-results">
-            <p style="text-align:center; color:#999; font-size:0.9rem;">點擊上方分類搜尋附近地點...</p>
+            <p style="text-align:center; color:#888; font-size:0.9rem; margin-top:20px;">
+                正在定位中...<br>(若在台灣測試，請點選分類按鈕搜尋附近)
+            </p>
         </div>
     </div>
 
     <div id="view-wallet" class="view-section">
         <div class="total-box">
-            <small>總支出</small><br>
-            ¥ <span id="total-expense">0</span>
+            <small>總支出</small>
+            <div style="font-size:2rem; font-weight:bold;">¥ <span id="total-val">0</span></div>
         </div>
-
         <div class="card">
-            <h3>新增記帳</h3>
+            <h3>🖊️ 新增記帳</h3>
             <div style="display:flex; gap:10px; margin-top:10px;">
-                <input type="text" id="exp-name" placeholder="項目 (如: 纜車)" style="flex:2; padding:8px; border:1px solid #ccc; border-radius:4px;">
-                <input type="number" id="exp-cost" placeholder="金額" style="flex:1; padding:8px; border:1px solid #ccc; border-radius:4px;">
+                <input type="text" id="input-item" placeholder="項目" style="flex:2;">
+                <input type="number" id="input-cost" placeholder="金額" style="flex:1;">
             </div>
-            <button class="btn" style="width:100%; margin-top:10px;" onclick="addExpense()">+ 加入</button>
+            <button class="btn" style="width:100%; margin-top:10px;" onclick="addExpense()">加入</button>
         </div>
-
-        <div id="expense-list" class="card" style="min-height: 200px;">
-            </div>
+        <div class="card" id="expense-list" style="min-height:100px;"></div>
     </div>
 
 </div>
@@ -300,272 +200,190 @@
 </nav>
 
 <script>
-    [cite_start]// --- 1. 資料結構化 (行程表) [cite: 4, 5, 21, 35, 57, 71, 82, 96, 113] ---
-    let itineraryData = [
-        {
-            day: "Day 1 (12/10)",
-            title: "抵達岡山",
-            items: [
-                { time: "TBD", content: "抵達岡山機場，搭巴士至岡山車站" },
-                { time: "Check-in", content: "後樂園飯店 / 領JR Pass / 西瓜卡儲值", note: "高島屋8F領Shopper's Card" }
-            ]
-        },
-        {
-            day: "Day 2 (12/11)",
-            title: "金刀比羅宮・後樂園",
-            items: [
-                { time: "08:52", content: "岡山 → 琴平 (南風號 1號車廂)" },
-                { time: "10:00", content: "金刀比羅宮參拜", note: "建議搭計程車至神椿咖啡廳(500階)" },
-                { time: "12:30", content: "午餐：lwanoya 烏龍麵" },
-                { time: "13:47", content: "琴平 → 岡山" },
-                { time: "15:45", content: "岡山後樂園 / 岡山城", note: "路面電車至城下站" }
-            ]
-        },
-        {
-            day: "Day 3 (12/12)",
-            title: "姬路城・書寫山圓教寺",
-            items: [
-                { time: "07:25", content: "岡山 → 姬路 (新幹線)" },
-                { time: "08:10", content: "搭神姬巴士(#10) → 書寫山纜車" },
-                { time: "09:00", content: "圓教寺巡禮", note: "末代武士取景地，靜心體驗" },
-                { time: "12:00", content: "午餐：鰻魚飯 (Moriju)" },
-                { time: "13:30", content: "姬路城、好古園" },
-                { time: "17:36", content: "姬路 → 岡山" }
-            ]
-        },
-        {
-            day: "Day 4 (12/13)",
-            title: "倉敷美觀 → 移動至松山",
-            items: [
-                { time: "09:16", content: "岡山 → 倉敷" },
-                { time: "09:40", content: "倉敷美觀地區散策", note: "阿智神社、倉敷桃子、廣榮堂" },
-                { time: "13:11", content: "倉敷 → 岡山 (取行李)" },
-                { time: "14:35", content: "特急前往松山 (愛媛)" },
-                { time: "17:30", content: "大街道飯店 Check-in / 晚餐：炸豬排" }
-            ]
-        },
-        {
-            day: "Day 5 (12/14)",
-            title: "松山城・道後溫泉",
-            items: [
-                { time: "10:30", content: "松山城 (纜車)、今治毛巾店" },
-                { time: "13:00", content: "午餐：鯛魚飯" },
-                { time: "15:00", content: "道後溫泉 Check-in", note: "注意：尾端電梯需核對身分" },
-                { time: "16:00", content: "溫泉街、少爺機關鐘、道後溫泉本館" }
-            ]
-        },
-        {
-            day: "Day 6 (12/15)",
-            title: "瀨戶內海渡輪 → 廣島",
-            items: [
-                { time: "10:50", content: "前往松山港 (電車轉巴士)" },
-                { time: "14:15", content: "搭乘 SEA PASEO 渡輪", note: "持PASS換票" },
-                { time: "16:57", content: "抵達廣島港 → 市區飯店" }
-            ]
-        },
-        {
-            day: "Day 7 (12/16)",
-            title: "宮島嚴島神社・廣島市區",
-            items: [
-                { time: "07:22", content: "廣島 → 宮島口 → 渡輪" },
-                { time: "08:30", content: "嚴島神社、大鳥居", note: "需付登島稅 100円" },
-                { time: "13:00", content: "返回廣島市區" },
-                { time: "14:30", content: "原爆圓頂、廣島城" },
-                { time: "18:00", content: "八丁堀購物 (唐吉軻德) / 晚餐：廣島燒" }
-            ]
-        },
-        {
-            day: "Day 8 (12/17)",
-            title: "返程",
-            items: [
-                { time: "07:15", content: "廣島站搭機場巴士" },
-                { time: "11:15", content: "飛機起飛 → 13:10 抵達桃園" }
-            ]
-        }
+    // --- 1. 資料與變數定義 ---
+    [cite_start]// 行程表資料 [cite: 4, 5, 21, 35, 57, 71, 82, 96, 113]
+    const itineraryData = [
+        { day: "Day 1 (12/10)", title: "抵達岡山", items: [
+            {t:"11:40", c:"抵達岡山機場 -> 巴士至岡山站"}, {t:"14:00", c:"領JR Pass & 劃位"}, {t:"15:00", c:"後樂園飯店 Check-in / 高島屋"}
+        ]},
+        { day: "Day 2 (12/11)", title: "金刀比羅宮", items: [
+            {t:"08:52", c:"岡山 -> 琴平 (南風號)"}, {t:"10:00", c:"金刀比羅宮 (建議計程車至神椿)"}, {t:"12:30", c:"午餐：烏龍麵"}, {t:"15:45", c:"岡山後樂園"}
+        ]},
+        { day: "Day 3 (12/12)", title: "姬路・書寫山", items: [
+            {t:"07:25", c:"岡山 -> 姬路 (新幹線)"}, {t:"08:10", c:"神姬巴士#10 -> 書寫山纜車"}, {t:"09:00", c:"圓教寺 (末代武士取景地)"}, {t:"13:30", c:"姬路城、好古園"}
+        ]},
+        { day: "Day 4 (12/13)", title: "倉敷 -> 松山", items: [
+            {t:"09:16", c:"岡山 -> 倉敷美觀地區"}, {t:"13:11", c:"返回岡山取行李"}, {t:"14:35", c:"岡山 -> 松山 (予讚線特急)"}, {t:"17:30", c:"大街道 Check-in"}
+        ]},
+        { day: "Day 5 (12/14)", title: "松山城・道後", items: [
+            {t:"10:30", c:"松山城 (纜車)、今治毛巾"}, {t:"13:00", c:"午餐：鯛魚飯"}, {t:"15:00", c:"道後溫泉 Check-in"}, {t:"16:00", c:"少爺機關鐘、溫泉本館"}
+        ]},
+        { day: "Day 6 (12/15)", title: "渡輪 -> 廣島", items: [
+            {t:"10:50", c:"道後 -> 松山港"}, {t:"14:15", c:"搭乘 SEA PASEO 渡輪"}, {t:"16:57", c:"抵達廣島港 -> 市區"}
+        ]},
+        { day: "Day 7 (12/16)", title: "宮島・廣島", items: [
+            {t:"07:22", c:"廣島 -> 宮島口 -> 渡輪"}, {t:"08:30", c:"嚴島神社、大鳥居"}, {t:"14:30", c:"原爆圓頂、廣島城"}, {t:"18:00", c:"八丁堀 (廣島燒)"}
+        ]},
+        { day: "Day 8 (12/17)", title: "返程", items: [
+            {t:"07:15", c:"廣島站 -> 機場巴士"}, {t:"11:15", c:"飛機起飛 -> 13:10 抵達桃園"}
+        ]}
     ];
 
-    let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
-    let isEditMode = false;
-
-    // --- 2. 雙層選單設定 ---
+    // 搜尋分類設定
     const categories = {
         play: { label: "玩樂", subs: ["公園", "博物館", "神社", "購物中心"] },
-        food: { label: "美食", subs: ["親子餐廳", "燒肉", "壽司", "咖啡廳", "拉麵"] },
+        food: { label: "美食", subs: ["親子餐廳", "燒肉", "壽司", "拉麵", "咖啡廳"] },
         health: { label: "健康", subs: ["藥妝店", "診所", "醫院", "廁所"] },
-        convenience: { label: "便利", subs: ["便利商店", "超市", "停車場", "車站"] }
+        conv: { label: "便利", subs: ["便利商店", "超市", "車站", "停車場"] }
     };
 
-    // --- 3. 初始化 ---
+    // Google Maps 相關全域變數
+    let map;
+    let service;
+    let infowindow;
+    let markers = [];
+
+    // 記帳資料
+    let expenses = [];
+    try { expenses = JSON.parse(localStorage.getItem('tripExp')) || []; } catch(e){ expenses=[]; }
+
+
+    // --- 2. 初始化流程 ---
     document.addEventListener('DOMContentLoaded', () => {
         renderItinerary();
         renderExpenses();
-        initMap(); // 嘗試初始化地圖 (若無key會報錯，但不影響其他功能)
-        selectCategory('play'); // 預設選單
+        selectMainCat('play'); // 預設載入子選單
+        // Google Maps 會透過 callback=initMap 觸發初始化
     });
 
-    // --- 4. 頁面切換邏輯 ---
-    function switchView(viewName, navEl) {
-        document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
-        document.getElementById(`view-${viewName}`).classList.add('active');
-        document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-        navEl.classList.add('active');
-        
-        // 如果切換到地圖，重新調整大小以免顯示錯誤
-        if(viewName === 'explore' && map) {
-            setTimeout(() => google.maps.event.trigger(map, "resize"), 100);
-        }
-    }
-
-    // --- 5. 行程表功能 (含編輯與拖曳 UI) ---
-    function renderItinerary() {
-        const container = document.getElementById('itinerary-list');
-        container.innerHTML = '';
-
-        itineraryData.forEach((day, index) => {
-            const dayHTML = `
-                <div class="card ${isEditMode ? 'edit-mode' : ''}">
-                    <div class="day-header" onclick="toggleDay(${index})">
-                        <span>${day.day} ${day.title}</span>
-                        <span>▼</span>
-                    </div>
-                    <div class="day-details" id="day-${index}" ${index === 0 ? 'class="day-details open"' : ''}>
-                        ${day.items.map((item, itemIdx) => `
-                            <div class="timeline-item" draggable="${isEditMode}" ondragstart="drag(event, ${index}, ${itemIdx})" ondrop="drop(event, ${index}, ${itemIdx})" ondragover="allowDrop(event)">
-                                <span class="time-badge">${item.time}</span>
-                                <span contenteditable="${isEditMode}" onblur="updateItem(${index}, ${itemIdx}, 'content', this.innerText)">${item.content}</span>
-                                ${item.note ? `<div style="font-size:0.8rem; color:#888; margin-top:2px;">⚠️ ${item.note}</div>` : ''}
-                                ${isEditMode ? `<span class="drag-handle" onclick="deleteItem(${index}, ${itemIdx})">🗑️</span>` : ''}
-                            </div>
-                        `).join('')}
-                        ${isEditMode ? `<button class="btn btn-sm btn-outline" onclick="addItem(${index})">+ 新增項目</button>` : ''}
-                    </div>
-                </div>
-            `;
-            container.innerHTML += dayHTML;
-        });
-        
-        // 預設展開第一天
-        if(!isEditMode) document.getElementById('day-0').classList.add('open');
-    }
-
-    function toggleDay(index) {
-        const el = document.getElementById(`day-${index}`);
-        el.classList.toggle('open');
-    }
-
-    function toggleEditMode() {
-        isEditMode = !isEditMode;
-        document.getElementById('editBtn').innerText = isEditMode ? '完成' : '✎ 編輯行程';
-        document.getElementById('editBtn').className = isEditMode ? 'btn btn-sm btn-danger' : 'btn btn-sm btn-outline';
-        renderItinerary();
-    }
-
-    // 簡單的資料更新 (實作示意)
-    function updateItem(dayIdx, itemIdx, field, val) { itineraryData[dayIdx].items[itemIdx][field] = val; }
-    function deleteItem(dayIdx, itemIdx) { itineraryData[dayIdx].items.splice(itemIdx, 1); renderItinerary(); }
-    function addItem(dayIdx) { itineraryData[dayIdx].items.push({time:"--:--", content:"新行程"}); renderItinerary(); }
-    
-    // 拖曳功能 (簡化版)
-    let dragSrc = null;
-    function allowDrop(ev) { ev.preventDefault(); }
-    function drag(ev, dayIdx, itemIdx) { dragSrc = {d:dayIdx, i:itemIdx}; }
-    function drop(ev, dayIdx, itemIdx) {
-        ev.preventDefault();
-        if(dragSrc.d === dayIdx) {
-            const items = itineraryData[dayIdx].items;
-            const [moved] = items.splice(dragSrc.i, 1);
-            items.splice(itemIdx, 0, moved);
-            renderItinerary();
-        }
-    }
-
-    // --- 6. 地圖與搜尋 (Google Maps API + AI 建議) ---
-    let map, service, infoWindow;
-
+    // --- 3. Google Maps 核心邏輯 ---
     function initMap() {
-        // 若沒有 API Key，這裡會報錯，因此需包在 try catch 或等待載入
-        if (typeof google === 'undefined') return;
+        // 嘗試抓取定位
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const pos = { lat: position.coords.latitude, lng: position.coords.longitude };
+                    createMap(pos);
+                },
+                () => {
+                    [cite_start]// 定位失敗，預設到岡山車站 [cite: 6]
+                    createMap({ lat: 34.6663, lng: 133.9185 }); 
+                }
+            );
+        } else {
+            createMap({ lat: 34.6663, lng: 133.9185 });
+        }
+    }
 
-        navigator.geolocation.getCurrentPosition((position) => {
-            const userLoc = { lat: position.coords.latitude, lng: position.coords.longitude };
-            // 若不在日本，預設到岡山車站 (34.6663, 133.9185) 方便預覽
-            const center = (userLoc.lat > 30 && userLoc.lat < 46 && userLoc.lng > 128) ? userLoc : { lat: 34.6663, lng: 133.9185 };
-
-            map = new google.maps.Map(document.getElementById("map"), {
-                center: center,
-                zoom: 14,
-                styles: [ /* 簡易的復古地圖樣式 */
-                    { "featureType": "landscape", "stylers": [{ "color": "#f5f5f5" }] },
-                    { "featureType": "poi.park", "stylers": [{ "color": "#dedede" }] }
-                ]
-            });
-            service = new google.maps.places.PlacesService(map);
-            
-            new google.maps.Marker({ position: center, map: map, title: "現在位置" });
-        }, () => {
-            // 定位失敗 fallback
-            console.log("定位失敗");
+    function createMap(centerPos) {
+        map = new google.maps.Map(document.getElementById("map"), {
+            center: centerPos,
+            zoom: 15,
+            disableDefaultUI: true, // 簡化介面
+            styles: [ // 簡易日式淡雅風格
+                { "featureType": "landscape", "stylers": [{ "color": "#f5f5f5" }] },
+                { "featureType": "poi", "stylers": [{ "visibility": "simplified" }] }
+            ]
         });
-    }
-
-    function selectCategory(catKey) {
-        // 更新 UI
-        document.querySelectorAll('#main-cats .pill-btn').forEach(b => b.classList.remove('active'));
-        event.target.classList.add('active');
         
-        // 生成子按鈕
-        const subContainer = document.getElementById('sub-cats');
-        subContainer.innerHTML = categories[catKey].subs.map(sub => 
-            `<div class="sub-pill" onclick="searchPlaces('${sub}')">${sub}</div>`
-        ).join('');
+        // 標記目前位置
+        new google.maps.Marker({
+            position: centerPos,
+            map: map,
+            title: "目前位置",
+            icon: {
+                path: google.maps.SymbolPath.CIRCLE,
+                scale: 8,
+                fillColor: "#4285F4",
+                fillOpacity: 1,
+                strokeWeight: 2,
+                strokeColor: "white",
+            }
+        });
+
+        service = new google.maps.places.PlacesService(map);
+        infowindow = new google.maps.InfoWindow();
     }
 
-    function searchPlaces(query) {
-        if (!map || !service) {
-            alert("請先設定 Google Maps API Key 才能搜尋地圖。");
-            // 模擬搜尋結果 (無 API 時的體驗)
-            renderMockResults(query);
+    // 執行搜尋
+    function searchNearby(query) {
+        if (!service) {
+            alert("地圖尚未載入完成，請稍候");
             return;
         }
 
         const request = {
             location: map.getCenter(),
-            radius: '1000',
+            radius: '1000', // 1公里內
             query: query,
-            openNow: true
+            openNow: true   // 依需求：只找營業中
         };
+
+        // 清除舊標記
+        markers.forEach(m => m.setMap(null));
+        markers = [];
+        document.getElementById('places-results').innerHTML = '<p style="text-align:center;">搜尋中...</p>';
 
         service.textSearch(request, (results, status) => {
             if (status === google.maps.places.PlacesServiceStatus.OK && results) {
-                renderResults(results, query);
+                renderPlacesList(results, query);
+                
+                // 自動調整地圖視野
+                const bounds = new google.maps.LatLngBounds();
+                results.forEach(place => {
+                    createMarker(place);
+                    if (place.geometry.viewport) {
+                        bounds.union(place.geometry.viewport);
+                    } else {
+                        bounds.extend(place.geometry.location);
+                    }
+                });
+                map.fitBounds(bounds);
+            } else {
+                document.getElementById('places-results').innerHTML = '<p style="text-align:center;">附近找不到營業中的地點。</p>';
             }
         });
     }
 
-    // AI 建議生成器 (爸媽視角)
-    function generateAiTip(placeType, name) {
-        const n = name || "";
-        if (n.includes("燒肉") || placeType.includes("bbq")) return "注意炭火位置，避免孩子燙傷。";
-        if (n.includes("居酒屋")) return "確認是否有禁菸區，或適合兒童的料理。";
-        if (placeType.includes("park")) return "別忘了帶防蚊液與乾洗手，檢查是否有公廁。";
-        if (n.includes("圓教寺") || n.includes("城")) return "階梯較多，若有推車建議寄放，準備揹巾。";
-        if (placeType.includes("drugstore")) return "可在此購買兒童退熱貼與防曬乳。";
-        if (placeType.includes("convenience_store")) return "可購買飯糰或牛奶作為孩子備用糧食。";
+    function createMarker(place) {
+        const marker = new google.maps.Marker({
+            map: map,
+            position: place.geometry.location
+        });
+        
+        google.maps.event.addListener(marker, "click", () => {
+            infowindow.setContent(`<strong>${place.name}</strong><br>${place.formatted_address}`);
+            infowindow.open(map, marker);
+        });
+        markers.push(marker);
+    }
+
+    // 生成「爸媽視角」AI 建議
+    function generateAiTip(place, query) {
+        const types = place.types ? place.types.join(' ') : '';
+        const name = place.name;
+        
+        if (query.includes("燒肉") || types.includes("bbq")) return "注意炭火位置，避免孩子燙傷。";
+        if (query.includes("居酒屋") || types.includes("bar")) return "確認是否有禁菸區。";
+        if (types.includes("park")) return "別忘了防蚊液，檢查是否有公廁。";
+        if (query.includes("神社") || query.includes("寺")) return "階梯可能較多，若有推車建議寄放。";
+        if (types.includes("pharmacy") || types.includes("drug")) return "可在此購買兒童退熱貼或備用藥。";
+        if (types.includes("convenience")) return "可補給牛奶、飯糰作為孩子點心。";
         return "人潮擁擠時請牽好孩子的手。";
     }
 
-    function renderResults(results, typeStr) {
+    function renderPlacesList(results, query) {
         const container = document.getElementById('places-results');
         container.innerHTML = '';
-        
-        // 清除舊 Markers (簡化略過)
 
-        results.slice(0, 5).forEach(place => {
-            const tip = generateAiTip(place.types.join(' '), place.name + " " + typeStr);
+        results.slice(0, 10).forEach(place => { // 只顯示前10筆
+            const tip = generateAiTip(place, query);
             const html = `
-                <div class="place-card">
+                <div class="place-card" onclick="panToPlace('${place.place_id}')">
                     <div style="font-weight:bold;">${place.name}</div>
-                    <div style="font-size:0.8rem; color:#666;">⭐ ${place.rating || '無評分'} · ${place.formatted_address || '附近'}</div>
+                    <div style="font-size:0.8rem; color:#666; margin:4px 0;">
+                        ⭐ ${place.rating || '無'} · ${place.formatted_address || '附近'}
+                    </div>
                     <div class="ai-tip">爸媽 Note：${tip}</div>
                 </div>
             `;
@@ -573,55 +391,105 @@
         });
     }
 
-    // 模擬搜尋結果 (當沒有 API Key 時顯示)
-    function renderMockResults(query) {
-        const container = document.getElementById('places-results');
-        container.innerHTML = `
-            <div class="place-card">
-                <div style="font-weight:bold;">(範例) 附近的${query}</div>
-                <div style="font-size:0.8rem; color:#666;">⭐ 4.5 · 步行 5 分鐘</div>
-                <div class="ai-tip">爸媽 Note：${generateAiTip('mock', query)}</div>
-            </div>
-            <div style="text-align:center; margin-top:10px; color:red; font-size:0.8rem;">
-                * 實際搜尋需填入 API Key
-            </div>
-        `;
+    // 點擊列表卡片移動地圖
+    window.panToPlace = function(placeId) { // 掛載到 window 以便 onclick 呼叫
+        const request = { placeId: placeId, fields: ['name', 'geometry'] };
+        service.getDetails(request, (place, status) => {
+            if (status === google.maps.places.PlacesServiceStatus.OK) {
+                map.setCenter(place.geometry.location);
+                map.setZoom(17);
+            }
+        });
     }
 
-    // --- 7. 記帳功能 ---
+
+    // --- 4. UI 互動邏輯 ---
+    // 切換分類
+    window.selectMainCat = function(key, btn) {
+        if(btn) {
+            document.querySelectorAll('.category-scroll .pill-btn').forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+        }
+        
+        const subContainer = document.getElementById('sub-cats-container');
+        subContainer.innerHTML = categories[key].subs.map(sub => 
+            `<div class="sub-pill" onclick="searchNearby('${sub}')">${sub}</div>`
+        ).join('');
+        
+        // 自動搜尋第一個子分類
+        if(map) searchNearby(categories[key].subs[0]);
+    }
+
+    // 切換頁面
+    window.switchView = function(viewName, navEl) {
+        document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+        document.getElementById(`view-${viewName}`).classList.add('active');
+        
+        document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
+        navEl.classList.add('active');
+        
+        // 修正地圖顯示問題 (display:none 切換回來需要 resize)
+        if(viewName === 'explore' && map) {
+            setTimeout(() => google.maps.event.trigger(map, "resize"), 100);
+        }
+    }
+
+    // 行程表渲染
+    function renderItinerary() {
+        const list = document.getElementById('itinerary-list');
+        list.innerHTML = itineraryData.map((day, idx) => `
+            <div class="card">
+                <div class="day-header" onclick="toggleDay(${idx})">
+                    <b>${day.day} ${day.title}</b> <span>▼</span>
+                </div>
+                <div class="day-details ${idx===0?'open':''}" id="day-${idx}">
+                    ${day.items.map(item => `
+                        <div class="timeline-item">
+                            <span class="time-badge">${item.t}</span> ${item.c}
+                        </div>
+                    `).join('')}
+                </div>
+            </div>
+        `).join('');
+    }
+    window.toggleDay = function(idx) {
+        document.getElementById(`day-${idx}`).classList.toggle('open');
+    }
+
+    // 記帳功能
     function renderExpenses() {
         const list = document.getElementById('expense-list');
-        const totalEl = document.getElementById('total-expense');
-        list.innerHTML = '';
         let total = 0;
-
-        expenses.forEach((ex, idx) => {
+        list.innerHTML = expenses.map((ex, idx) => {
             total += parseInt(ex.cost);
-            list.innerHTML += `
-                <div class="expense-row">
-                    <span>${ex.name}</span>
-                    <span>¥${ex.cost} <span onclick="removeExpense(${idx})" style="color:red; margin-left:5px; cursor:pointer;">x</span></span>
+            return `
+                <div class="expense-item">
+                    <span>${ex.item}</span>
+                    <span>
+                        ¥${Number(ex.cost).toLocaleString()} 
+                        <span onclick="delExpense(${idx})" style="color:red; margin-left:8px; cursor:pointer;">×</span>
+                    </span>
                 </div>
             `;
-        });
-        totalEl.innerText = total.toLocaleString();
+        }).join('');
+        document.getElementById('total-val').innerText = total.toLocaleString();
     }
-
-    function addExpense() {
-        const name = document.getElementById('exp-name').value;
-        const cost = document.getElementById('exp-cost').value;
-        if(name && cost) {
-            expenses.push({name, cost});
-            localStorage.setItem('expenses', JSON.stringify(expenses));
+    
+    window.addExpense = function() {
+        const item = document.getElementById('input-item').value;
+        const cost = document.getElementById('input-cost').value;
+        if(item && cost) {
+            expenses.push({item, cost});
+            localStorage.setItem('tripExp', JSON.stringify(expenses));
             renderExpenses();
-            document.getElementById('exp-name').value = '';
-            document.getElementById('exp-cost').value = '';
+            document.getElementById('input-item').value = '';
+            document.getElementById('input-cost').value = '';
         }
     }
     
-    function removeExpense(idx) {
+    window.delExpense = function(idx) {
         expenses.splice(idx, 1);
-        localStorage.setItem('expenses', JSON.stringify(expenses));
+        localStorage.setItem('tripExp', JSON.stringify(expenses));
         renderExpenses();
     }
 
