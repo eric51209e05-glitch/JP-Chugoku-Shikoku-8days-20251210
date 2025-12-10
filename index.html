@@ -43,6 +43,19 @@
         }
         header h1 { font-family: var(--font-serif); font-size: 1.5rem; color: var(--c-primary-dark); margin: 0; letter-spacing: 2px;}
         header p { font-size: 0.8rem; color: var(--c-wood); margin-top: 4px; letter-spacing: 1px; }
+        
+        #weather-widget {
+            font-size: 0.85rem;
+            color: var(--c-primary);
+            margin-top: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        #weather-widget.visible { opacity: 1; }
 
         .container { max-width: 600px; margin: 0 auto; padding: 0 16px; }
 
@@ -156,7 +169,10 @@
 
 <header>
     <h1>書寫山・巡禮帖</h1>
-    <p>中國四國 × 圓教寺 8日紀行</p>
+    <p>2025.12.10 - 12.17</p>
+    <div id="weather-widget">
+        <span>📍 定位中...</span>
+    </div>
 </header>
 
 <div class="container">
@@ -302,6 +318,7 @@
     document.addEventListener('DOMContentLoaded', () => {
         renderItinerary();
         renderExpenses();
+        initWeather();
     });
 
     // 切換頁面
@@ -415,6 +432,62 @@
     function saveAndRender() {
         localStorage.setItem('zenTripExpenses', JSON.stringify(expenses));
         renderExpenses();
+    }
+
+    // --- Weather Feature ---
+    function initWeather() {
+        const widget = document.getElementById('weather-widget');
+        
+        if (!navigator.geolocation) {
+            widget.innerHTML = "<span>⚠️ 瀏覽器不支援定位</span>";
+            widget.classList.add('visible');
+            return;
+        }
+
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const lat = position.coords.latitude;
+                const lon = position.coords.longitude;
+                fetchWeather(lat, lon);
+            },
+            (error) => {
+                console.error("Geo Error:", error);
+                widget.innerHTML = "<span>⚠️ 無法獲取位置</span>";
+                widget.classList.add('visible');
+            }
+        );
+    }
+
+    async function fetchWeather(lat, lon) {
+        const widget = document.getElementById('weather-widget');
+        try {
+            const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&timezone=auto`);
+            const data = await res.json();
+            const current = data.current_weather;
+            
+            const temp = Math.round(current.temperature);
+            const code = current.weathercode;
+            const { icon, text } = getWeatherStatus(code);
+
+            widget.innerHTML = `<span>${icon} 現在氣溫 ${temp}°C ${text}</span>`;
+            widget.classList.add('visible');
+        } catch (e) {
+            console.error("Weather API Error:", e);
+            widget.innerHTML = "<span>⚠️ 天氣資訊暫時無法使用</span>";
+            widget.classList.add('visible');
+        }
+    }
+
+    function getWeatherStatus(code) {
+        // WMO Weather interpretation codes
+        if (code === 0) return { icon: '☀️', text: '晴朗' };
+        if (code >= 1 && code <= 3) return { icon: '⛅', text: '多雲' };
+        if (code >= 45 && code <= 48) return { icon: '🌫️', text: '有霧' };
+        if (code >= 51 && code <= 67) return { icon: '🌧️', text: '有雨' };
+        if (code >= 71 && code <= 77) return { icon: '❄️', text: '下雪' };
+        if (code >= 80 && code <= 82) return { icon: '🌦️', text: '陣雨' };
+        if (code >= 95) return { icon: '⛈️', text: '雷雨' };
+        return { icon: '🌡️', text: '' };
     }
 
 </script>
