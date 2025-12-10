@@ -27,7 +27,7 @@
             font-family: var(--font-main);
             background-color: var(--c-bg);
             color: var(--c-text);
-            padding-bottom: 90px; /* 避開底部導航 */
+            padding-bottom: 90px;
         }
 
         /* 頂部 Header */
@@ -60,12 +60,22 @@
             font-size: 0.9rem; transition: 0.2s; display: inline-flex; align-items: center; justify-content: center;
         }
         .btn:active { transform: scale(0.98); }
+        
+        /* 導航按鈕 */
         .btn-nav {
-            background: transparent; border: 1px solid var(--c-wood); color: var(--c-wood);
-            padding: 4px 10px; font-size: 0.75rem; border-radius: 12px; text-decoration: none;
-            margin-left: auto; /* 靠右對齊 */
+            background: var(--c-primary); 
+            color: #fff;
+            padding: 6px 12px; 
+            font-size: 0.8rem; 
+            border-radius: 20px; 
+            text-decoration: none;
+            margin-left: auto;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
         }
-        .btn-nav:active { background: var(--c-light); }
+        .btn-nav:active { background: var(--c-primary-dark); transform: scale(0.95); }
 
         /* --- 行程表樣式 --- */
         .day-header {
@@ -78,15 +88,14 @@
         .day-details { display: none; padding-left: 10px; border-left: 2px dashed var(--c-light); margin-left: 10px; animation: slideDown 0.3s ease-out; }
         .day-details.open { display: block; }
         
-        .timeline-item { position: relative; padding-bottom: 20px; padding-left: 10px; }
+        .timeline-item { position: relative; padding-bottom: 20px; padding-left: 10px; border-bottom: 1px solid #fcfcfc; margin-bottom: 10px;}
         
-        /* 時間與標題行 */
-        .item-header { display: flex; align-items: center; gap: 8px; margin-bottom: 6px; }
+        .item-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
         .time-badge {
             font-size: 0.85rem; font-weight: bold; color: var(--c-primary-dark);
             background: var(--c-light); padding: 2px 6px; border-radius: 4px; min-width: 45px; text-align: center;
         }
-        .item-title { font-weight: bold; font-size: 1rem; color: #333; }
+        .item-title { font-weight: bold; font-size: 1rem; color: #333; flex: 1; }
 
         /* AI 建議區塊 */
         .ai-tip-box {
@@ -95,11 +104,11 @@
             border-radius: 8px;
             padding: 10px;
             margin-top: 6px;
-            margin-left: 4px;
             font-size: 0.85rem;
             color: #5d5550;
             display: flex;
             gap: 8px;
+            line-height: 1.4;
         }
         .ai-icon { font-size: 1.2rem; }
         .ai-content strong { color: var(--c-accent); }
@@ -115,8 +124,6 @@
         .total-amount { font-size: 2.2rem; font-weight: bold; font-family: var(--font-serif); margin-top: 5px; }
         
         .expense-item { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding: 12px 0; }
-        .expense-info { display: flex; flex-direction: column; }
-        .expense-date { font-size: 0.7rem; color: #999; }
         .expense-cost { font-weight: bold; color: var(--c-primary-dark); }
         .delete-btn { color: #ccc; padding: 4px 8px; font-size: 1.2rem; cursor: pointer; }
         .delete-btn:hover { color: var(--c-accent); }
@@ -131,20 +138,18 @@
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(10px);
             border-radius: 30px;
-            display: flex; justify-content: space-around; padding: 10px 0; z-index: 999;
+            display: flex; justify-content: space-around; padding: 12px 0; z-index: 999;
             box-shadow: 0 5px 20px rgba(0,0,0,0.15);
             border: 1px solid rgba(255,255,255,0.5);
         }
-        .nav-item { text-align: center; color: #aaa; font-size: 0.75rem; flex: 1; cursor: pointer; transition: 0.2s; }
+        .nav-item { text-align: center; color: #aaa; font-size: 0.8rem; flex: 1; cursor: pointer; transition: 0.2s; }
         .nav-item.active { color: var(--c-primary); font-weight: bold; transform: translateY(-2px); }
-        .nav-icon { display: block; font-size: 1.4rem; margin-bottom: 2px; }
+        .nav-icon { margin-right: 4px; }
 
-        /* 動畫 */
         .view-section { display: none; animation: fadeIn 0.3s; }
         .view-section.active { display: block; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-
     </style>
 </head>
 <body>
@@ -170,6 +175,9 @@
 
         <div id="itinerary-list">
             </div>
+        <div style="text-align:center; margin-bottom: 100px; color:#999; font-size:0.8rem;">
+            點擊「📍 導航」即可開啟 Google Maps
+        </div>
     </div>
 
     <div id="view-wallet" class="view-section">
@@ -191,8 +199,8 @@
             <div style="text-align:center; color:#ccc; padding:20px;">尚無記帳資料</div>
         </div>
         
-        <div style="text-align:center; margin-bottom: 20px;">
-             <button onclick="clearExpenses()" style="background:none; border:none; color:#999; text-decoration:underline; font-size:0.8rem;">清除所有記錄</button>
+        <div style="text-align:center; margin-bottom: 100px;">
+             <button onclick="clearExpenses()" style="background:none; border:none; color:#999; text-decoration:underline; font-size:0.8rem; cursor:pointer;">清除所有記錄</button>
         </div>
     </div>
 
@@ -209,34 +217,34 @@
 
 <script>
     // --- 1. 行程與 AI 建議資料庫 ---
-    [cite_start]// 資料來源：您提供的文件 [cite: 1-122]
+    [cite_start]// 資料來源參考 [cite: 5, 21, 35, 71, 82, 96]
     const itineraryData = [
         { 
             day: "Day 1 (12/10)", 
             title: "抵達岡山", 
             items: [
                 [cite_start]{ t: "11:40", title: "岡山桃太郎機場", loc: "Okayama Momotaro Airport", tip: "出關後前往 2 號候車處搭乘巴士 [cite: 7]。" },
-                [cite_start]{ t: "14:00", title: "岡山車站 (領取 JR Pass)", loc: "Okayama Station JR Ticket Office", tip: "在此兌換「瀨戶內海週遊券」並劃位。營業至 20:00 [cite: 9]。" },
-                [cite_start]{ t: "15:00", title: "後樂園飯店 Check-in", loc: "Okayama Koraku Hotel", tip: "飯店就在河畔旁，若有時間可去高島屋 8F 領 shopper's card [cite: 17]。" }
+                [cite_start]{ t: "14:00", title: "岡山車站 (JR Pass)", loc: "Okayama Station JR Ticket Office", tip: "在此兌換「瀨戶內海週遊券」並劃位。營業至 20:00 [cite: 9]。" },
+                [cite_start]{ t: "15:00", title: "後樂園飯店 Check-in", loc: "Okayama Koraku Hotel", tip: "飯店就在河畔旁，高島屋 8F 可領 shopper's card [cite: 17]。" }
             ]
         },
         { 
             day: "Day 2 (12/11)", 
             title: "金刀比羅宮・後樂園", 
             items: [
-                [cite_start]{ t: "08:52", title: "搭乘南風號前往琴平", loc: "Okayama Station", tip: "使用週遊券，記得劃位第一節車廂 [cite: 22]。" },
-                [cite_start]{ t: "10:00", title: "金刀比羅宮", loc: "Kotohira-gu", tip: "達人建議：直接攔計程車坐到「神椿咖啡廳」(500階)，省下一半爬樓梯的力氣，再步行至本宮 [cite: 26]。" },
-                [cite_start]{ t: "12:30", title: "午餐：lwanoya 烏龍麵", loc: "Iwanoya Udon Kotohira", tip: "香川縣必吃烏龍麵 [cite: 27]。" },
-                [cite_start]{ t: "15:45", title: "岡山後樂園 / 岡山城", loc: "Okayama Korakuen", tip: "搭路面電車至「城下站」，出示週遊券可免費搭乘 [cite: 32]。" }
+                [cite_start]{ t: "08:52", title: "岡山 → 琴平", loc: "Okayama Station", tip: "搭乘南風號，使用週遊券記得劃位第一節車廂 [cite: 22]。" },
+                [cite_start]{ t: "10:00", title: "金刀比羅宮", loc: "Kotohira-gu", tip: "達人建議：直接攔計程車坐到「神椿咖啡廳」(500階)，省下一半爬樓梯的力氣 [cite: 26]。" },
+                [cite_start]{ t: "12:30", title: "午餐：lwanoya 烏龍麵", loc: "Iwanoya Udon Kotohira", tip: "參拜後的補充體力首選 [cite: 27]。" },
+                [cite_start]{ t: "15:45", title: "岡山後樂園 / 岡山城", loc: "Okayama Korakuen", tip: "搭路面電車至「城下站」，後門上車、前門下車出示週遊券 [cite: 32]。" }
             ]
         },
         { 
             day: "Day 3 (12/12)", 
             title: "姬路城・書寫山圓教寺", 
             items: [
-                [cite_start]{ t: "08:10", title: "姬路站搭神姬巴士(#10)", loc: "Himeji Station Bus Terminal", tip: "於站前 10 號站牌搭車，終點站「書寫山纜車」下車 [cite: 39]。" },
-                [cite_start]{ t: "09:00", title: "書寫山圓教寺", loc: "Shoshazan Engyo-ji", tip: "電影《末代武士》取景地。氣氛靜謐，建議購買巴士+纜車套票 1700円 [cite: 37, 43]。" },
-                [cite_start]{ t: "12:00", title: "午餐：Moriju 鰻魚飯", loc: "Moriju Himeji", tip: "補充體力的好選擇 [cite: 48]。" },
+                [cite_start]{ t: "08:10", title: "姬路站 → 書寫山", loc: "Himeji Station Bus Terminal", tip: "於站前 10 號站牌搭神姬巴士，終點站「書寫山纜車」下車 [cite: 39]。" },
+                [cite_start]{ t: "09:00", title: "書寫山圓教寺", loc: "Shoshazan Engyo-ji", tip: "電影《末代武士》取景地。上山後需付 1000 円搭乘小巴入山 [cite: 43]。" },
+                [cite_start]{ t: "12:00", title: "午餐：Moriju 鰻魚飯", loc: "Moriju Himeji", tip: "參觀完書寫山後的午餐安排 [cite: 48]。" },
                 [cite_start]{ t: "13:30", title: "姬路城、好古園", loc: "Himeji Castle", tip: "日本第一名城。回程於「姬路城大手門前站」搭巴士回車站 [cite: 51]。" }
             ]
         },
@@ -245,19 +253,19 @@
             title: "倉敷美觀 → 移動松山", 
             items: [
                 [cite_start]{ t: "09:40", title: "倉敷美觀地區", loc: "Kurashiki Bikan Historical Quarter", tip: "必訪：倉敷桃子霜淇淋、廣榮堂、阿智神社 [cite: 62]。" },
-                [cite_start]{ t: "13:11", title: "返回岡山取行李", loc: "Okayama Station", tip: "準備移動到四國，記得預留時間拿行李 [cite: 64]。" },
-                [cite_start]{ t: "14:35", title: "搭乘予讚線特急往松山", loc: "Okayama Station", tip: "車程約 3 小時，可在車上休息 [cite: 66]。" },
-                [cite_start]{ t: "17:30", title: "晚餐：炸豬排", loc: "Matsuyama Daikaido", tip: "住在大街道飯店，交通方便 [cite: 68]。" }
+                [cite_start]{ t: "13:11", title: "返回岡山取行李", loc: "Okayama Station", tip: "準備移動到四國，預留時間拿行李 [cite: 65]。" },
+                [cite_start]{ t: "14:35", title: "特急往松山", loc: "Okayama Station", tip: "搭乘予讚線特急前往愛媛松山 [cite: 66]。" },
+                [cite_start]{ t: "17:30", title: "晚餐：炸豬排", loc: "Matsuyama Daikaido", tip: "入住大街道飯店，交通方便 [cite: 68]。" }
             ]
         },
         { 
             day: "Day 5 (12/14)", 
             title: "松山城・道後溫泉", 
             items: [
-                [cite_start]{ t: "10:30", title: "松山城 (纜車)", loc: "Matsuyama Castle", tip: "體驗搭乘單人纜椅上山，風景極佳 [cite: 73]。" },
-                [cite_start]{ t: "13:00", title: "午餐：鯛魚飯", loc: "Matsuyama Taimeshi", tip: "愛媛縣特色料理 [cite: 74]。" },
-                [cite_start]{ t: "15:00", title: "道後溫泉飯店 Check-in", loc: "Dogo Onsen", tip: "⚠️ 注意：道後溫泉尾端有電梯直達大廳，若未 Check-in 需用對講機請飯店開門 [cite: 81]。" },
-                [cite_start]{ t: "16:00", title: "道後溫泉街散策", loc: "Dogo Onsen Honkan", tip: "少爺機關鐘整點會有表演，別錯過道後溫泉本館拍照 [cite: 77]。" }
+                [cite_start]{ t: "10:30", title: "松山城 (纜車)", loc: "Matsuyama Castle", tip: "體驗搭乘纜車上山，周邊可逛今治毛巾店 [cite: 73]。" },
+                [cite_start]{ t: "13:00", title: "午餐：鯛魚飯", loc: "Matsuyama Taimeshi", tip: "愛媛縣必吃的特色鄉土料理 [cite: 74]。" },
+                [cite_start]{ t: "15:00", title: "道後溫泉 Check-in", loc: "Dogo Onsen", tip: "⚠️ 注意：飯店尾端有電梯直達大廳，若未 Check-in 需用對講機請飯店開門 [cite: 81]。" },
+                [cite_start]{ t: "16:00", title: "道後溫泉街", loc: "Dogo Onsen Honkan", tip: "少爺機關鐘、道後溫泉本館拍照 [cite: 77]。" }
             ]
         },
         { 
@@ -265,8 +273,8 @@
             title: "瀨戶內海汽船 → 廣島", 
             items: [
                 [cite_start]{ t: "10:50", title: "前往松山港", loc: "Matsuyama Tourist Port", tip: "電車轉巴士，注意轉乘時間 [cite: 85]。" },
-                [cite_start]{ t: "14:15", title: "搭乘 SEA PASEO 渡輪", loc: "Matsuyama Tourist Port Ferry Terminal", tip: "持 JR PASS 換票。船體設計新穎，適合拍照 [cite: 90]。" },
-                [cite_start]{ t: "16:57", title: "抵達廣島港", loc: "Hiroshima Port", tip: "轉搭廣島電鐵至市區飯店 [cite: 91]。" }
+                [cite_start]{ t: "14:15", title: "搭乘 SEA PASEO 渡輪", loc: "Matsuyama Tourist Port Ferry Terminal", tip: "持 JR PASS 換票。船體設計新穎，適合拍照 [cite: 89, 90]。" },
+                [cite_start]{ t: "16:57", title: "抵達廣島港", loc: "Hiroshima Port", tip: "轉搭廣島電鐵至市區飯店 [cite: 93]。" }
             ]
         },
         { 
@@ -275,7 +283,7 @@
             items: [
                 [cite_start]{ t: "08:25", title: "宮島口搭渡輪", loc: "Miyajimaguchi Station", tip: "搭乘 JR 西日本渡輪（週遊券可用），需另付登島稅 100円/人 [cite: 99]。" },
                 [cite_start]{ t: "09:00", title: "嚴島神社、大鳥居", loc: "Itsukushima Jinja", tip: "注意潮汐時間。小心鹿群會吃紙張 [cite: 100]。" },
-                [cite_start]{ t: "14:30", title: "原爆圓頂、廣島城", loc: "Atomic Bomb Dome", tip: "搭乘路面電車移動方便 [cite: 106]。" },
+                [cite_start]{ t: "14:30", title: "原爆圓頂、廣島城", loc: "Atomic Bomb Dome", tip: "搭乘循環巴士或路面電車移動 [cite: 104]。" },
                 [cite_start]{ t: "18:00", title: "八丁堀 (廣島燒)", loc: "Hatchobori Hiroshima", tip: "晚餐推薦廣島燒，也可去唐吉軻德補貨 [cite: 107]。" }
             ]
         },
@@ -283,7 +291,7 @@
             day: "Day 8 (12/17)", 
             title: "返程", 
             items: [
-                [cite_start]{ t: "07:15", title: "廣島站搭機場巴士", loc: "Hiroshima Station Shinkansen Exit", tip: "北口 5 號站牌，前門上車，可刷信用卡 [cite: 114]。" },
+                [cite_start]{ t: "07:15", title: "廣島站搭機場巴士", loc: "Hiroshima Station Shinkansen Exit", tip: "北口 5 號站牌，前門上車，可刷信用卡 1500円 [cite: 114]。" },
                 [cite_start]{ t: "11:15", title: "廣島機場起飛", loc: "Hiroshima Airport", tip: "滿載回憶，平安回家 [cite: 116]。" }
             ]
         }
@@ -305,7 +313,7 @@
         navEl.classList.add('active');
     }
 
-    // 渲染行程表
+    // 渲染行程表 (修復後的連結語法)
     function renderItinerary() {
         const list = document.getElementById('itinerary-list');
         list.innerHTML = itineraryData.map((day, idx) => `
@@ -339,7 +347,8 @@
     }
 
     function toggleDay(idx) {
-        document.getElementById(`day-${idx}`).classList.toggle('open');
+        const el = document.getElementById(`day-${idx}`);
+        el.classList.toggle('open');
     }
 
     // --- 3. 記帳功能 (Local Storage) ---
