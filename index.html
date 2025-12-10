@@ -191,8 +191,7 @@
 </nav>
 
 <script>
-    // --- 行程資料 (源自上傳的檔案) ---
-    [cite_start]// [cite: 1, 2, 4]
+    // --- Data Section ---
     const itineraryData = [
         { day: "Day 1 (12/10)", title: "抵達岡山", items: [
             {t:"11:40", c:"抵達岡山機場 -> 巴士至岡山站"}, {t:"14:00", c:"領JR Pass & 劃位"}, {t:"15:00", c:"後樂園飯店 Check-in / 高島屋"}
@@ -234,14 +233,14 @@
     let expenses = [];
     try { expenses = JSON.parse(localStorage.getItem('tripExp')) || []; } catch(e){ expenses=[]; }
 
-    // 初始化
+    // --- Core Logic ---
     document.addEventListener('DOMContentLoaded', () => {
         renderItinerary();
         renderExpenses();
         selectMainCat('play');
     });
 
-    // 地圖功能
+    // Map Functions
     function initMap() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
@@ -249,7 +248,7 @@
                     createMap({ lat: position.coords.latitude, lng: position.coords.longitude });
                 },
                 () => {
-                    createMap({ lat: 34.6663, lng: 133.9185 }); // 岡山
+                    createMap({ lat: 34.6663, lng: 133.9185 }); 
                 }
             );
         } else {
@@ -357,7 +356,6 @@
         });
     }
 
-    // 將函式掛載到 window，避免作用域錯誤
     window.panToPlace = function(placeId) {
         const request = { placeId: placeId, fields: ['name', 'geometry'] };
         service.getDetails(request, (place, status) => {
