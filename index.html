@@ -4,10 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>書寫山・巡禮帖 | 8日周遊</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
     <style>
         /* --- 視覺風格：圓教寺・禪意 (Zen & Wood) --- */
         :root {
-            --c-bg: #f4f1ea;       /* 和紙白 */
+            --c-bg: #F7F4EB;       /* 米色紋理背景 */
             --c-text: #2c2825;     /* 墨黑 */
             --c-primary: #5c6e58;  /* 苔綠 */
             --c-primary-dark: #3a4a36;
@@ -15,9 +18,9 @@
             --c-wood: #8c7b6c;     /* 古木色 */
             --c-light: #e8e4dc;
             --c-white: #ffffff;
-            --shadow: 0 4px 12px rgba(44, 40, 37, 0.08);
-            --radius: 12px;
-            --font-main: "Helvetica Neue", Helvetica, "PingFang TC", "Microsoft JhengHei", sans-serif;
+            --shadow: 4px 4px 0px #E0E5D5; /* Soft Shadow */
+            --radius: 16px;
+            --font-main: "M PLUS Rounded 1c", "Helvetica Neue", Helvetica, "PingFang TC", "Microsoft JhengHei", sans-serif;
             --font-serif: "Songti TC", "Noto Serif TC", serif;
         }
 
@@ -26,6 +29,8 @@
             margin: 0; padding: 0;
             font-family: var(--font-main);
             background-color: var(--c-bg);
+            background-image: radial-gradient(#E0E5D5 1px, transparent 1px);
+            background-size: 20px 20px;
             color: var(--c-text);
             padding-bottom: 90px;
         }
@@ -44,19 +49,19 @@
         .card {
             background: var(--c-white);
             border-radius: var(--radius);
-            padding: 16px;
-            margin-bottom: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
             box-shadow: var(--shadow);
-            border-left: 4px solid var(--c-primary);
+            border: 1px solid #E0E5D5;
             position: relative;
         }
 
         .btn {
             background: var(--c-primary); color: white; border: none;
             padding: 8px 16px; border-radius: 20px; cursor: pointer;
-            font-size: 0.9rem; transition: 0.2s; display: inline-flex; align-items: center; justify-content: center;
+            font-size: 0.9rem; transition: 0.1s; display: inline-flex; align-items: center; justify-content: center;
         }
-        .btn:active { transform: scale(0.98); }
+        .btn:active { transform: scale(0.95); }
         
         .btn-nav {
             background: var(--c-primary); 
@@ -69,7 +74,8 @@
             display: inline-flex;
             align-items: center;
             gap: 4px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            box-shadow: 2px 2px 0px rgba(0,0,0,0.1);
+            transition: 0.1s;
         }
         .btn-nav:active { background: var(--c-primary-dark); transform: scale(0.95); }
 
@@ -79,6 +85,7 @@
             margin-bottom: 10px; cursor: pointer;
             display: flex; justify-content: space-between; align-items: center;
             font-family: var(--font-serif);
+            box-shadow: 2px 2px 0px rgba(0,0,0,0.1);
         }
         .day-details { display: none; padding-left: 10px; border-left: 2px dashed var(--c-light); margin-left: 10px; animation: slideDown 0.3s ease-out; }
         .day-details.open { display: block; }
@@ -111,7 +118,7 @@
             background: var(--c-primary-dark); color: white;
             padding: 24px; border-radius: var(--radius);
             text-align: right; margin-bottom: 20px;
-            box-shadow: 0 4px 15px rgba(58, 74, 54, 0.3);
+            box-shadow: var(--shadow);
         }
         .total-label { font-size: 0.8rem; opacity: 0.8; letter-spacing: 1px; }
         .total-amount { font-size: 2.2rem; font-weight: bold; font-family: var(--font-serif); margin-top: 5px; }
@@ -125,14 +132,15 @@
         input:focus { border-color: var(--c-primary); }
 
         .bottom-nav {
-            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%);
-            width: 90%; max-width: 400px;
-            background: rgba(255, 255, 255, 0.95);
+            position: fixed; bottom: 0; left: 0; transform: none;
+            width: 100%; max-width: 100%;
+            background: rgba(255, 255, 255, 0.98);
             backdrop-filter: blur(10px);
-            border-radius: 30px;
-            display: flex; justify-content: space-around; padding: 12px 0; z-index: 999;
-            box-shadow: 0 5px 20px rgba(0,0,0,0.15);
-            border: 1px solid rgba(255,255,255,0.5);
+            border-radius: 0;
+            display: flex; justify-content: space-around; padding: 16px 0; z-index: 999;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+            border: none;
+            border-top: 1px solid #E0E5D5;
         }
         .nav-item { text-align: center; color: #aaa; font-size: 0.8rem; flex: 1; cursor: pointer; transition: 0.2s; }
         .nav-item.active { color: var(--c-primary); font-weight: bold; transform: translateY(-2px); }
