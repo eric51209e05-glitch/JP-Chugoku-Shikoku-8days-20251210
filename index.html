@@ -240,8 +240,8 @@
         selectMainCat('play');
     });
 
-    // Map Functions
-    function initMap() {
+    // Map Functions - 掛載到 window 確保全域可呼叫
+    window.initMap = function() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 (position) => {
@@ -254,7 +254,7 @@
         } else {
             createMap({ lat: 34.6663, lng: 133.9185 });
         }
-    }
+    };
 
     function createMap(centerPos) {
         const mapEl = document.getElementById("map");
@@ -442,7 +442,7 @@
     };
 </script>
 
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyARy8kyAOrvlptzGYKaqR04QrZIxEUt6KI&libraries=places&callback=initMap"></script>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyARy8kyAOrvlptzGYKaqR04QrZIxEUt6KI&libraries=places&callback=initMap&loading=async"></script>
 
 </body>
 </html>
