@@ -211,6 +211,25 @@
             <div class="total-amount">¥ <span id="total-val">0</span></div>
         </div>
 
+        <!-- 匯率換算器 -->
+        <div class="card" style="background: #fcfcfc;">
+            <h3 style="margin-top:0; font-size:1rem; color:var(--c-wood);">💱 匯率換算 (參考)</h3>
+            <div style="display:flex; align-items:center; gap:10px; margin-top:15px;">
+                <div style="flex:1;">
+                    <label style="font-size:0.8rem; color:#888;">JPY (日幣)</label>
+                    <input type="number" id="calc-jpy" placeholder="¥" oninput="convertCurrency('jpy')">
+                </div>
+                <div style="font-size:1.2rem; color:#ccc;">⇄</div>
+                <div style="flex:1;">
+                    <label style="font-size:0.8rem; color:#888;">TWD (台幣)</label>
+                    <input type="number" id="calc-twd" placeholder="$" oninput="convertCurrency('twd')">
+                </div>
+            </div>
+            <div style="text-align:right; font-size:0.75rem; color:#aaa; margin-top:8px;">
+                匯率設定: 1 JPY ≈ <span id="rate-display">0.22</span> TWD
+            </div>
+        </div>
+
         <div class="card">
             <h3 style="margin-top:0; font-size:1rem; color:var(--c-wood);">🖊️ 新增支出</h3>
             <div style="display:flex; gap:10px; margin-top:15px;">
@@ -540,6 +559,30 @@
         if (code >= 80 && code <= 82) return { icon: '🌦️', text: '陣雨' };
         if (code >= 95) return { icon: '⛈️', text: '雷雨' };
         return { icon: '🌡️', text: '' };
+    }
+
+    // --- Currency Converter ---
+    const EXCHANGE_RATE = 0.22; // 1 JPY = 0.22 TWD (可根據需求調整)
+
+    function convertCurrency(source) {
+        const jpyInput = document.getElementById('calc-jpy');
+        const twdInput = document.getElementById('calc-twd');
+
+        if (source === 'jpy') {
+            const jpy = parseFloat(jpyInput.value);
+            if (!isNaN(jpy)) {
+                twdInput.value = Math.round(jpy * EXCHANGE_RATE);
+            } else {
+                twdInput.value = '';
+            }
+        } else {
+            const twd = parseFloat(twdInput.value);
+            if (!isNaN(twd)) {
+                jpyInput.value = Math.round(twd / EXCHANGE_RATE);
+            } else {
+                jpyInput.value = '';
+            }
+        }
     }
 
 </script>
