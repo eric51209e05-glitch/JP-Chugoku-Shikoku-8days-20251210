@@ -2,591 +2,387 @@
 <html lang="zh-TW">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>戀上瀨戶內海的藍</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026 寒假家族旅 | 桃園大溪</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Noto Sans TC"', 'sans-serif'],
+                    },
+                    colors: {
+                        'jp-bg': '#f4f4f0',       /* 和紙白 */
+                        'jp-text': '#3e3a39',     /* 墨色 */
+                        'jp-card': '#ffffff',     /* 純白 */
+                        'jp-accent': '#8e9775',   /* 抹茶綠 (景點) */
+                        'jp-food': '#d4a373',     /* 焙茶色 (餐廳) */
+                        'jp-hotel': '#64748b',    /* 藍鼠色 (飯店) */
+                        'jp-nav': '#4b5563',      /* 深灰 (導航) */
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        /* --- 視覺風格：圓教寺・禪意 (Zen & Wood) --- */
-        :root {
-            --c-bg: #F7F4EB;       /* 米色紋理背景 */
-            --c-text: #2c2825;     /* 墨黑 */
-            --c-primary: #5c6e58;  /* 苔綠 */
-            --c-primary-dark: #3a4a36;
-            --c-accent: #a63737;   /* 朱印紅 */
-            --c-wood: #8c7b6c;     /* 古木色 */
-            --c-light: #e8e4dc;
-            --c-white: #ffffff;
-            --shadow: 4px 4px 0px #E0E5D5; /* Soft Shadow */
-            --radius: 16px;
-            --font-main: "M PLUS Rounded 1c", "Helvetica Neue", Helvetica, "PingFang TC", "Microsoft JhengHei", sans-serif;
-            --font-serif: "Songti TC", "Noto Serif TC", serif;
-        }
-
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body {
-            margin: 0; padding: 0;
-            font-family: var(--font-main);
-            background-color: var(--c-bg);
-            background-image: radial-gradient(#E0E5D5 1px, transparent 1px);
-            background-size: 20px 20px;
-            color: var(--c-text);
-            padding-bottom: 90px;
-        }
-
-        header {
-            text-align: center; padding: 24px 0 16px;
-            background: linear-gradient(to bottom, var(--c-bg), rgba(244,241,234,0));
-            position: sticky; top: 0; z-index: 100;
-            backdrop-filter: blur(8px);
-        }
-        header h1 { font-family: var(--font-serif); font-size: 1.5rem; color: var(--c-primary-dark); margin: 0; letter-spacing: 2px;}
-        header p { font-size: 0.8rem; color: var(--c-wood); margin-top: 4px; letter-spacing: 1px; }
-        
-        #weather-widget {
-            font-size: 0.85rem;
-            color: var(--c-primary);
-            margin-top: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            opacity: 0;
-            transition: opacity 0.5s;
-        }
-        #weather-widget.visible { opacity: 1; }
-
-        .container { max-width: 600px; margin: 0 auto; padding: 0 16px; }
-
-        .card {
-            background: var(--c-white);
-            border-radius: var(--radius);
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: var(--shadow);
-            border: 1px solid #E0E5D5;
-            position: relative;
-        }
-
-        .btn {
-            background: var(--c-primary); color: white; border: none;
-            padding: 8px 16px; border-radius: 20px; cursor: pointer;
-            font-size: 0.9rem; transition: 0.1s; display: inline-flex; align-items: center; justify-content: center;
-        }
-        .btn:active { transform: scale(0.95); }
-        
-        .btn-nav {
-            background: var(--c-primary); 
-            color: #fff;
-            padding: 6px 12px; 
-            font-size: 0.8rem; 
-            border-radius: 20px; 
-            text-decoration: none;
-            margin-left: auto;
-            display: inline-flex;
-            align-items: center;
-            gap: 4px;
-            box-shadow: 2px 2px 0px rgba(0,0,0,0.1);
-            transition: 0.1s;
-        }
-        .btn-nav:active { background: var(--c-primary-dark); transform: scale(0.95); }
-
-        .day-header {
-            background: var(--c-wood); color: white;
-            padding: 12px 16px; border-radius: var(--radius);
-            margin-bottom: 10px; cursor: pointer;
-            display: flex; justify-content: space-between; align-items: center;
-            font-family: var(--font-serif);
-            box-shadow: 2px 2px 0px rgba(0,0,0,0.1);
-        }
-        .day-details { display: none; padding-left: 10px; border-left: 2px dashed var(--c-light); margin-left: 10px; animation: slideDown 0.3s ease-out; }
-        .day-details.open { display: block; }
-        
-        .timeline-item { position: relative; padding-bottom: 20px; padding-left: 10px; border-bottom: 1px solid #fcfcfc; margin-bottom: 10px;}
-        
-        .item-header { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; flex-wrap: wrap; }
-        .time-badge {
-            font-size: 0.85rem; font-weight: bold; color: var(--c-primary-dark);
-            background: var(--c-light); padding: 2px 6px; border-radius: 4px; min-width: 55px; text-align: center;
-        }
-        .item-title { font-weight: bold; font-size: 1rem; color: #333; flex: 1; }
-
-        .ai-tip-box {
-            background-color: #f9f7f4;
-            border: 1px solid #e0dcd5;
-            border-radius: 8px;
-            padding: 10px;
-            margin-top: 6px;
-            font-size: 0.85rem;
-            color: #5d5550;
-            display: flex;
-            gap: 8px;
-            line-height: 1.4;
-        }
-        .ai-icon { font-size: 1.2rem; }
-        .ai-content strong { color: var(--c-accent); }
-
-        .total-box {
-            background: var(--c-primary-dark); color: white;
-            padding: 24px; border-radius: var(--radius);
-            text-align: right; margin-bottom: 20px;
-            box-shadow: var(--shadow);
-        }
-        .total-label { font-size: 0.8rem; opacity: 0.8; letter-spacing: 1px; }
-        .total-amount { font-size: 2.2rem; font-weight: bold; font-family: var(--font-serif); margin-top: 5px; }
-        
-        .expense-item { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #eee; padding: 12px 0; }
-        .expense-cost { font-weight: bold; color: var(--c-primary-dark); }
-        .delete-btn { color: #ccc; padding: 4px 8px; font-size: 1.2rem; cursor: pointer; }
-        .delete-btn:hover { color: var(--c-accent); }
-
-        input { padding: 12px; border: 1px solid #ddd; border-radius: 8px; width: 100%; font-size: 1rem; outline: none; transition: 0.2s; }
-        input:focus { border-color: var(--c-primary); }
-
-        .bottom-nav {
-            position: fixed; bottom: 0; left: 0; transform: none;
-            width: 100%; max-width: 100%;
-            background: rgba(255, 255, 255, 0.98);
-            backdrop-filter: blur(10px);
-            border-radius: 0;
-            display: flex; justify-content: space-around; padding: 16px 0; z-index: 999;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
-            border: none;
-            border-top: 1px solid #E0E5D5;
-        }
-        .nav-item { text-align: center; color: #aaa; font-size: 0.8rem; flex: 1; cursor: pointer; transition: 0.2s; }
-        .nav-item.active { color: var(--c-primary); font-weight: bold; transform: translateY(-2px); }
-        .nav-icon { margin-right: 4px; }
-
-        .view-section { display: none; animation: fadeIn 0.3s; }
-        .view-section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes slideDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        body { background-color: #f4f4f0; color: #3e3a39; -webkit-font-smoothing: antialiased; }
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body>
+<body class="antialiased min-h-screen pb-20" x-data="tripData()">
 
-<header>
-    <h1>戀上瀨戶內海的藍</h1>
-    <p>從岡山晴天之國到廣島宮島夕照</p>
-    <p>2025.12.10 - 12.17</p>
-    <div id="weather-widget">
-        <span>📍 定位中...</span>
-    </div>
-</header>
-
-<div class="container">
-
-    <div id="view-itinerary" class="view-section active">
-        <div class="card" id="main-weather-card" style="background: linear-gradient(135deg, #7F7FD5 0%, #86A8E7 50%, #91EAE4 100%); color: white; border:none; padding:20px;">
-            <div style="display:flex; align-items:center; justify-content:space-between;">
-                <div>
-                    <div id="weather-loc" style="font-size:0.85rem; opacity:0.9; letter-spacing:1px;">📍 定位中...</div>
-                    <div id="weather-temp" style="font-size:2.5rem; font-weight:bold; font-family: var(--font-serif);">--°C</div>
-                </div>
-                <div style="text-align:right;">
-                    <div id="weather-icon" style="font-size:3rem;">🌤️</div>
-                    <div id="weather-desc" style="font-size:0.9rem;">--</div>
-                </div>
-            </div>
-            <div style="margin-top: 15px; padding-top: 15px; border-top: 1px solid rgba(255,255,255,0.3); display: flex; justify-content: space-between; align-items: center;">
-                <div style="font-size: 0.9rem;">明日天氣</div>
-                <div style="display: flex; align-items: center; gap: 10px;">
-                    <span id="weather-tomorrow-icon" style="font-size: 1.2rem;"></span>
-                    <span id="weather-tomorrow-temp" style="font-size: 1rem; font-weight: bold;">-- / --°C</span>
-                </div>
-            </div>
-        </div>
-
-        <div id="itinerary-list">
-            </div>
-        <div style="text-align:center; margin-bottom: 100px; color:#999; font-size:0.8rem;">
-            點擊「📍 導航」即可開啟 Google Maps
-        </div>
-    </div>
-
-    <div id="view-wallet" class="view-section">
-        <div class="total-box">
-            <div class="total-label">旅費總支出 (JPY)</div>
-            <div class="total-amount">¥ <span id="total-val">0</span></div>
-        </div>
-
-        <!-- 匯率換算器 -->
-        <div class="card" style="background: #fcfcfc;">
-            <h3 style="margin-top:0; font-size:1rem; color:var(--c-wood);">💱 匯率換算 (參考)</h3>
-            <div style="display:flex; align-items:center; gap:10px; margin-top:15px;">
-                <div style="flex:1;">
-                    <label style="font-size:0.8rem; color:#888;">JPY (日幣)</label>
-                    <input type="number" id="calc-jpy" placeholder="¥" oninput="convertCurrency('jpy')">
-                </div>
-                <div style="font-size:1.2rem; color:#ccc;">⇄</div>
-                <div style="flex:1;">
-                    <label style="font-size:0.8rem; color:#888;">TWD (台幣)</label>
-                    <input type="number" id="calc-twd" placeholder="$" oninput="convertCurrency('twd')">
-                </div>
-            </div>
-            <div style="text-align:right; font-size:0.75rem; color:#aaa; margin-top:8px;">
-                匯率設定: 1 JPY ≈ <span id="rate-display">0.22</span> TWD
-            </div>
-        </div>
-
-        <div class="card">
-            <h3 style="margin-top:0; font-size:1rem; color:var(--c-wood);">🖊️ 新增支出</h3>
-            <div style="display:flex; gap:10px; margin-top:15px;">
-                <input type="text" id="input-item" placeholder="項目 (如: 纜車票)" style="flex:2;">
-                <input type="number" id="input-cost" placeholder="金額" style="flex:1;">
-            </div>
-            <button class="btn" style="width:100%; margin-top:15px; height:45px;" onclick="addExpense()">加入清單</button>
-        </div>
-
-        <div class="card" id="expense-list" style="min-height:100px;">
-            <div style="text-align:center; color:#ccc; padding:20px;">尚無記帳資料</div>
-        </div>
+    <div class="max-w-md mx-auto bg-jp-bg min-h-screen relative shadow-2xl overflow-hidden">
         
-        <div style="text-align:center; margin-bottom: 100px;">
-             <button onclick="clearExpenses()" style="background:none; border:none; color:#999; text-decoration:underline; font-size:0.8rem; cursor:pointer;">清除所有記錄</button>
-        </div>
-    </div>
+        <header class="sticky top-0 z-50 bg-jp-bg/90 backdrop-blur-sm px-6 py-4 border-b border-gray-200 flex justify-between items-center transition-all duration-300" :class="{'py-2 shadow-sm': scrolled}" @scroll.window="scrolled = (window.pageYOffset > 20)">
+            <div>
+                <p class="text-xs text-gray-500 tracking-widest uppercase">Family Trip 2026</p>
+                <h1 class="text-xl font-bold text-jp-text">桃園大溪慢旅</h1>
+            </div>
+            <div class="text-right">
+                <span class="text-xs font-medium bg-gray-200 px-2 py-1 rounded-full text-gray-600">3 天 2 夜</span>
+            </div>
+        </header>
 
-</div>
+        <main class="px-4 py-4 space-y-6">
 
-<nav class="bottom-nav">
-    <div class="nav-item active" onclick="switchView('itinerary', this)">
-        <span class="nav-icon">⛩️</span>行程導航
-    </div>
-    <div class="nav-item" onclick="switchView('wallet', this)">
-        <span class="nav-icon">👛</span>旅費記帳
-    </div>
-</nav>
-
-<script>
-    // --- 1. 行程與 AI 建議資料庫 ---
-    // 資料來源：您上傳的《中國、四國八日行程表》
-    const itineraryData = [
-        { 
-            day: "Day 1 (12/10)", 
-            title: "抵達岡山", 
-            items: [
-                { t: "11:40", title: "岡山桃太郎機場", loc: "Okayama Momotaro Airport", tip: "出關後前往 2 號候車處搭乘巴士至岡山站 。" },
-                { t: "14:00", title: "岡山車站 (JR Pass)", loc: "Okayama Station JR Ticket Office", tip: "領取「瀨戶內海週遊券」並劃位，營業至 20:00 。" },
-                { t: "15:00", title: "後樂園飯店 Check-in", loc: "Okayama Koraku Hotel", tip: "岡山高島屋 8F 可領 shopper's card，18:15 後 1F 退稅 。" }
-            ]
-        },
-        { 
-            day: "Day 2 (12/11)", 
-            title: "姬路城・書寫山圓教寺", 
-            items: [
-                { t: "10:09", title: "岡山 → 姬路", loc: "Himeji Station", tip: "搭乘新幹線 Kodama842 號，10:43 抵達 。(此日包含圓教寺行程 )" },
-                { t: "12:00", title: "午餐：Moriju 鰻魚飯", loc: "Moriju Himeji", tip: "位於姬路，補充體力的好選擇 。", food: "Moriju", menu: "鰻魚飯" },
-                { t: "13:30", title: "姬路城、好古園", loc: "Himeji Castle", tip: "約停留 4 小時 。回程於「姬路城大手門前站」上車 (IC卡 210円) 。" },
-                { t: "17:36", title: "姬路 → 岡山", loc: "Okayama Station", tip: "搭乘新幹線返回岡山，18:02 抵達 。" }
-            ]
-        },
-        { 
-            day: "Day 3 (12/12)", 
-            title: "金刀比羅宮・後樂園", 
-            items: [
-                { t: "08:52", title: "岡山 → 琴平", loc: "Kotohira Station", tip: "搭乘南風號，使用週遊券記得劃位第一節車廂 。" },
-                { t: "10:00", title: "金刀比羅宮", loc: "Kotohira-gu", tip: "達人攻略：攔計程車至「神椿咖啡廳」(500階)，再步行至本宮，省力很多 。", food: "資生堂神椿", menu: "神椿聖代" },
-                { t: "12:30", title: "午餐：lwanoya 烏龍麵", loc: "Iwanoya Udon Kotohira", tip: "參拜後的午餐推薦 。" },
-                { t: "13:47", title: "琴平 → 岡山", loc: "Okayama Station", tip: "搭乘南風號返回岡山 。(備案：若搭 14:47 班次則不去後樂園 )" },
-                { t: "15:45", title: "岡山後樂園 / 岡山城", loc: "Okayama Korakuen", tip: "搭路面電車至「城下站」，後門上車、前門下車出示週遊券 。" }
-            ]
-        },
-        { 
-            day: "Day 4 (12/13)", 
-            title: "倉敷美觀 → 移動松山", 
-            items: [
-                { t: "09:40", title: "倉敷美觀地區", loc: "Kurashiki Bikan Historical Quarter", tip: "必訪：倉敷桃子霜淇淋、廣榮堂、阿智神社 。" },
-                { t: "13:11", title: "返回岡山取行李", loc: "Okayama Station", tip: "13:28 抵達岡山，回飯店拿行李 。" },
-                { t: "14:35", title: "特急往松山", loc: "Matsuyama Station", tip: "搭乘予讚線特急前往愛媛松山，17:24 抵達 。" },
-                { t: "17:30", title: "晚餐：炸豬排", loc: "Matsuyama Daikaido", tip: "入住大街道飯店，交通方便 。" }
-            ]
-        },
-        { 
-            day: "Day 5 (12/14)", 
-            title: "松山城・道後溫泉", 
-            items: [
-                { t: "10:30", title: "松山城 (纜車)", loc: "Matsuyama Castle", tip: "搭乘纜車上山，周邊可逛今治毛巾店 。", gift: "今治毛巾" },
-                { t: "13:00", title: "午餐：鯛魚飯", loc: "Matsuyama Taimeshi", tip: "愛媛縣必吃的特色鄉土料理 。" },
-                { t: "15:00", title: "道後溫泉 Check-in", loc: "Dogo Onsen", tip: "⚠️ 注意：飯店尾端有電梯直達大廳，若未 Check-in 需用對講機請飯店開門 。" },
-                { t: "16:00", title: "道後溫泉街", loc: "Dogo Onsen Honkan", tip: "少爺機關鐘、道後溫泉本館拍照 。" }
-            ]
-        },
-        { 
-            day: "Day 6 (12/15)", 
-            title: "瀨戶內海汽船 → 廣島", 
-            items: [
-                { t: "10:50", title: "前往松山港", loc: "Matsuyama Tourist Port", tip: "電車轉巴士，注意巴士只收現金 100 円 (不找零/不抽整理券) 。(電車車資 410 )" },
-                { t: "14:15", title: "搭乘 SEA PASEO 渡輪", loc: "Matsuyama Tourist Port Ferry Terminal", tip: "持 JR PASS 換票。船體設計新穎，適合拍照 。" },
-                { t: "16:57", title: "抵達廣島港", loc: "Hiroshima Port", tip: "轉搭廣島電鐵至市區飯店 (IC卡車資 240) 。" }
-            ]
-        },
-        { 
-            day: "Day 7 (12/16)", 
-            title: "宮島 (嚴島神社)・廣島", 
-            items: [
-                { t: "07:22", title: "廣島 → 宮島口", loc: "Miyajimaguchi Station", tip: "搭乘山陽本線 。" },
-                { t: "08:25", title: "搭乘 JR 渡輪登島", loc: "Miyajima Ferry Terminal", tip: "使用週遊券，需另付登島稅 100円/人 。" },
-                { t: "09:00", title: "嚴島神社、大鳥居", loc: "Itsukushima Jinja", tip: "注意潮汐時間。小心鹿群 。" },
-                { t: "14:30", title: "原爆圓頂、廣島城", loc: "Atomic Bomb Dome", tip: "搭乘循環巴士或路面電車移動 。" },
-                { t: "18:00", title: "八丁堀 (廣島燒)", loc: "Hatchobori Hiroshima", tip: "晚餐推薦廣島燒，也可去唐吉軻德補貨 。", food: "八丁堀", menu: "廣島燒" }
-            ]
-        },
-        { 
-            day: "Day 8 (12/17)", 
-            title: "返程", 
-            items: [
-                { t: "07:15", title: "廣島站搭機場巴士", loc: "Hiroshima Station Shinkansen Exit", tip: "北口 5 號站牌，前門上車，信用卡車資 1500円 。" },
-                { t: "11:15", title: "廣島機場起飛", loc: "Hiroshima Airport", tip: "滿載回憶，平安回家 。", gift: "八天堂奶油麵包" }
-            ]
-        }
-    ];
-
-    // --- 2. 核心邏輯 ---
-    
-    // 初始化
-    document.addEventListener('DOMContentLoaded', () => {
-        renderItinerary();
-        renderExpenses();
-        initWeather();
-    });
-
-    // 切換頁面
-    function switchView(viewName, navEl) {
-        document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
-        document.getElementById(`view-${viewName}`).classList.add('active');
-        document.querySelectorAll('.nav-item').forEach(el => el.classList.remove('active'));
-        navEl.classList.add('active');
-    }
-
-    // 渲染行程表 (使用標準 Google Maps 搜尋連結)
-    function renderItinerary() {
-        const list = document.getElementById('itinerary-list');
-        list.innerHTML = itineraryData.map((day, idx) => `
-            <div class="card">
-                <div class="day-header" onclick="toggleDay(${idx})">
-                    <span>${day.day} ${day.title}</span>
-                    <span style="font-size:0.8rem;">▼</span>
-                </div>
-                <div class="day-details ${idx===0?'open':''}" id="day-${idx}">
-                    ${day.items.map(item => `
-                        <div class="timeline-item">
-                            <div class="item-header">
-                                <span class="time-badge">${item.t}</span>
-                                <span class="item-title">${item.title}</span>
-                                <a href="https://maps.google.com/?q=${encodeURIComponent(item.loc)}" 
-                                   target="_blank" class="btn-nav">
-                                   📍 導航
-                                </a>
+            <div x-show="activeTab === 'itinerary'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform -translate-x-4" x-transition:enter-end="opacity-100 transform translate-x-0">
+                
+                <template x-for="(day, index) in itinerary" :key="index">
+                    <div class="mb-8">
+                        <div class="flex items-center justify-between mb-4 px-2">
+                            <div>
+                                <h2 class="text-2xl font-bold text-jp-text" x-text="day.date"></h2>
+                                <p class="text-sm text-gray-500" x-text="day.weekday"></p>
                             </div>
-                            <div class="ai-tip-box">
-                                <span class="ai-icon">💡</span>
-                                <span class="ai-content">
-                                    <strong>達人 Note：</strong>${item.tip}
-                                </span>
+                            <div class="flex flex-col items-end">
+                                <div class="flex items-center space-x-2 text-jp-accent">
+                                    <i :class="day.weatherIcon"></i>
+                                    <span class="text-lg font-bold" x-text="day.temp"></span>
+                                </div>
+                                <span class="text-xs text-gray-400">降雨機率 <span x-text="day.rainProb"></span></span>
                             </div>
-                            ${item.food ? `
-                            <div class="ai-tip-box" style="background-color:#fff5f5; border-color:#ffe0e0;">
-                                <span class="ai-icon">🍜</span>
-                                <span class="ai-content"><strong>必吃美食：</strong>${item.food} - ${item.menu || ''}</span>
-                            </div>` : ''}
                         </div>
-                    `).join('')}
+
+                        <div class="space-y-4 relative pl-4 border-l-2 border-gray-200 ml-2">
+                            <template x-for="item in day.events" :key="item.time">
+                                <div class="relative pl-6">
+                                    <div class="absolute -left-[21px] top-3 w-4 h-4 rounded-full border-2 border-jp-bg" :class="getCategoryColor(item.type)"></div>
+                                    
+                                    <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
+                                        <div class="flex justify-between items-start mb-2">
+                                            <span class="text-sm font-mono font-bold text-gray-400" x-text="item.time"></span>
+                                            <span class="text-[10px] px-2 py-0.5 rounded border" :class="getBadgeStyle(item.type)" x-text="getCategoryName(item.type)"></span>
+                                        </div>
+
+                                        <h3 class="text-lg font-bold text-jp-text mb-1" x-text="item.title"></h3>
+                                        
+                                        <div x-show="item.tips" class="mb-3 space-y-1">
+                                            <template x-for="tip in item.tips" :key="tip.text">
+                                                <div class="flex items-start text-xs text-gray-600 bg-gray-50 p-1.5 rounded">
+                                                    <i :class="tip.icon" class="mr-1.5 mt-0.5 text-yellow-600"></i>
+                                                    <span x-html="highlightText(tip.text)"></span>
+                                                </div>
+                                            </template>
+                                        </div>
+
+                                        <div class="flex gap-2 mt-3">
+                                            <a :href="item.mapUrl" target="_blank" class="flex-1 flex items-center justify-center gap-2 bg-jp-text text-white text-sm py-2 rounded-xl active:scale-95 transition-transform shadow-lg shadow-gray-200/50">
+                                                <i class="fa-solid fa-location-arrow"></i>
+                                                <span>導航</span>
+                                            </a>
+                                            <button @click="showPhotoGuide(item)" x-show="item.photoSpot" class="w-10 flex items-center justify-center border border-gray-200 rounded-xl text-gray-500 hover:bg-gray-50">
+                                                <i class="fa-solid fa-camera"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </template>
+                        </div>
+                    </div>
+                </template>
+            </div>
+
+            <div x-show="activeTab === 'photos'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform translate-x-4" x-transition:enter-end="opacity-100 transform translate-x-0">
+                <div class="grid grid-cols-1 gap-6">
+                    <div class="text-center py-4">
+                        <h2 class="text-xl font-bold text-jp-text">攝影師之眼</h2>
+                        <p class="text-xs text-gray-400 mt-1">捕捉大溪最美的光影時刻</p>
+                    </div>
+                    
+                    <template x-for="spot in photoSpots" :key="spot.title">
+                        <div class="bg-white rounded-2xl overflow-hidden shadow-sm">
+                            <div class="h-48 bg-gray-200 relative overflow-hidden group">
+                                <img :src="spot.img" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="photo spot">
+                                <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/60 to-transparent p-4">
+                                    <h3 class="text-white font-bold text-lg" x-text="spot.title"></h3>
+                                </div>
+                            </div>
+                            <div class="p-4">
+                                <div class="flex items-center gap-2 mb-3">
+                                    <span class="text-xs font-bold bg-black text-white px-2 py-0.5 rounded">最佳焦段</span>
+                                    <span class="text-xs text-gray-600" x-text="spot.lens"></span>
+                                </div>
+                                <p class="text-sm text-gray-600 leading-relaxed mb-4" x-text="spot.desc"></p>
+                                <div class="bg-gray-50 p-3 rounded-xl border border-dashed border-gray-300">
+                                    <p class="text-xs text-gray-500"><i class="fa-solid fa-lightbulb text-yellow-500 mr-1"></i> <strong>構圖建議：</strong> <span x-text="spot.composition"></span></p>
+                                </div>
+                            </div>
+                        </div>
+                    </template>
                 </div>
             </div>
-        `).join('');
-    }
 
-    function toggleDay(idx) {
-        const el = document.getElementById(`day-${idx}`);
-        el.classList.toggle('open');
-    }
+        </main>
 
-    // --- 3. 記帳功能 (Local Storage) ---
-    let expenses = [];
-    try {
-        expenses = JSON.parse(localStorage.getItem('zenTripExpenses')) || [];
-    } catch(e) { expenses = []; }
+        <nav class="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-white/90 backdrop-blur-md border border-gray-200 shadow-2xl rounded-full px-6 py-3 flex gap-8 z-50">
+            <button @click="activeTab = 'itinerary'" class="flex flex-col items-center gap-1 transition-colors" :class="activeTab === 'itinerary' ? 'text-jp-text' : 'text-gray-400'">
+                <i class="fa-solid fa-map text-xl"></i>
+                <span class="text-[10px] font-medium">行程</span>
+            </button>
+            <button @click="activeTab = 'photos'" class="flex flex-col items-center gap-1 transition-colors" :class="activeTab === 'photos' ? 'text-jp-text' : 'text-gray-400'">
+                <i class="fa-solid fa-camera-retro text-xl"></i>
+                <span class="text-[10px] font-medium">攝影</span>
+            </button>
+        </nav>
 
-    function renderExpenses() {
-        const list = document.getElementById('expense-list');
-        const totalEl = document.getElementById('total-val');
-        
-        if (expenses.length === 0) {
-            list.innerHTML = '<div style="text-align:center; color:#ccc; padding:20px;">尚無記帳資料</div>';
-            totalEl.innerText = "0";
-            return;
-        }
+        <div x-show="modalOpen" class="fixed inset-0 z-[60] flex items-center justify-center px-4" style="display: none;">
+            <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" @click="modalOpen = false"></div>
+            <div class="bg-white rounded-2xl w-full max-w-sm p-6 relative z-10 shadow-2xl transform transition-all" @click.stop>
+                <button @click="modalOpen = false" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
+                    <i class="fa-solid fa-xmark text-xl"></i>
+                </button>
+                <h3 class="text-xl font-bold mb-4" x-text="currentPhotoSpot?.title"></h3>
+                <img :src="currentPhotoSpot?.img" class="w-full h-48 object-cover rounded-xl mb-4 bg-gray-100">
+                <p class="text-sm text-gray-600 mb-2" x-text="currentPhotoSpot?.desc"></p>
+                <p class="text-xs text-gray-500 bg-gray-50 p-2 rounded"><i class="fa-solid fa-crop-simple mr-1"></i> <span x-text="currentPhotoSpot?.composition"></span></p>
+            </div>
+        </div>
 
-        let sum = 0;
-        list.innerHTML = expenses.map((ex, idx) => {
-            sum += parseInt(ex.cost);
-            return `
-                <div class="expense-item">
-                    <div class="expense-info">
-                        <span>${ex.item}</span>
-                    </div>
-                    <div>
-                        <span class="expense-cost">¥${Number(ex.cost).toLocaleString()}</span>
-                        <span class="delete-btn" onclick="delExpense(${idx})">×</span>
-                    </div>
-                </div>
-            `;
-        }).join('');
-        totalEl.innerText = sum.toLocaleString();
-    }
+    </div>
 
-    function addExpense() {
-        const itemIn = document.getElementById('input-item');
-        const costIn = document.getElementById('input-cost');
-        const item = itemIn.value.trim();
-        const cost = costIn.value;
+    <script>
+        function tripData() {
+            return {
+                activeTab: 'itinerary',
+                scrolled: false,
+                modalOpen: false,
+                currentPhotoSpot: null,
+                
+                // 導遊邏輯：高亮特定關鍵字
+                highlightText(text) {
+                    return text.replace(/(必點|必買|推薦|招牌)/g, '<span class="font-bold text-jp-food">$1</span>')
+                               .replace(/(2月|季節限定)/g, '<span class="font-bold text-jp-accent">$1</span>');
+                },
 
-        if(item && cost) {
-            expenses.push({ item, cost });
-            saveAndRender();
-            itemIn.value = '';
-            costIn.value = '';
-        }
-    }
+                // 顏色分類邏輯
+                getCategoryColor(type) {
+                    const map = { 'sight': 'bg-jp-accent', 'food': 'bg-jp-food', 'hotel': 'bg-jp-hotel', 'transport': 'bg-gray-400' };
+                    return map[type] || 'bg-gray-400';
+                },
+                getBadgeStyle(type) {
+                    const map = { 
+                        'sight': 'border-jp-accent text-jp-accent bg-jp-accent/5', 
+                        'food': 'border-jp-food text-jp-food bg-jp-food/5', 
+                        'hotel': 'border-jp-hotel text-jp-hotel bg-jp-hotel/5',
+                        'transport': 'border-gray-400 text-gray-500 bg-gray-50'
+                    };
+                    return map[type];
+                },
+                getCategoryName(type) {
+                    const map = { 'sight': '景點', 'food': '餐飲', 'hotel': '住宿', 'transport': '交通' };
+                    return map[type];
+                },
 
-    function delExpense(idx) {
-        if(confirm("確定刪除此筆資料？")) {
-            expenses.splice(idx, 1);
-            saveAndRender();
-        }
-    }
-    
-    function clearExpenses() {
-        if(confirm("確定要清空所有記帳紀錄嗎？無法復原喔！")) {
-            expenses = [];
-            saveAndRender();
-        }
-    }
+                showPhotoGuide(item) {
+                    // Find matching photo spot data
+                    const spot = this.photoSpots.find(p => item.title.includes(p.keyword));
+                    if (spot) {
+                        this.currentPhotoSpot = spot;
+                        this.modalOpen = true;
+                    }
+                },
 
-    function saveAndRender() {
-        localStorage.setItem('zenTripExpenses', JSON.stringify(expenses));
-        renderExpenses();
-    }
+                // 攝影資料庫
+                photoSpots: [
+                    {
+                        keyword: '大溪橋',
+                        title: '大溪橋 & 鳳飛飛故事館',
+                        img: 'https://images.unsplash.com/photo-1552423316-c73e120f2c44?auto=format&fit=crop&q=80&w=600', // Placeholder
+                        lens: '廣角 16-24mm / 人像 50mm',
+                        desc: '大溪橋在傍晚藍調時刻（Blue Hour）最美，橋身燈光亮起與天空形成對比。',
+                        composition: '站在橋頭低角度仰拍巴洛克式牌樓，或在側面拍攝橋身延伸感。'
+                    },
+                    {
+                        keyword: '山豬湖',
+                        title: '山豬湖生態園區',
+                        img: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&q=80&w=600', // Placeholder
+                        lens: '長焦 70-200mm (拍鳥/特寫)',
+                        desc: '利用池面倒影拍攝天空與樹木的對稱構圖。2月若有殘留落羽松，色彩層次豐富。',
+                        composition: '尋找水池邊緣的S型曲線，或利用蘆葦當前景拍攝人像。'
+                    },
+                    {
+                        keyword: '落羽松',
+                        title: '月眉人工濕地落羽松',
+                        img: 'https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&q=80&w=600', // Placeholder
+                        lens: '標準 35-50mm',
+                        desc: '著名的水中落羽松。即使葉子掉落，枯枝在水中的倒影也有一種蕭瑟的禪意。',
+                        composition: '將水平線置於畫面中央，強調上下對稱的鏡面效果。'
+                    },
+                    {
+                        keyword: '巧克力',
+                        title: '巧克力共和國',
+                        img: 'https://images.unsplash.com/photo-1623755498840-79848d689408?auto=format&fit=crop&q=80&w=600', // Placeholder
+                        lens: '大光圈定焦鏡',
+                        desc: '建築外觀切面像巧克力塊，室內採光良好，適合拍攝親子DIY互動特寫。',
+                        composition: '拍攝孩子專注製作巧克力的神情，手部特寫。'
+                    }
+                ],
 
-    // --- Weather Feature ---
-    function initWeather() {
-        const widget = document.getElementById('weather-widget');
-        
-        if (!navigator.geolocation) {
-            widget.innerHTML = "<span>⚠️ 瀏覽器不支援定位</span>";
-            widget.classList.add('visible');
-            return;
-        }
-
-        navigator.geolocation.getCurrentPosition(
-            (position) => {
-                const lat = position.coords.latitude;
-                const lon = position.coords.longitude;
-                fetchWeather(lat, lon);
-            },
-            (error) => {
-                console.error("Geo Error:", error);
-                widget.innerHTML = "<span>⚠️ 無法獲取位置</span>";
-                widget.classList.add('visible');
+                // 行程資料 (已整合您的需求與連結)
+                itinerary: [
+                    {
+                        date: '2/7',
+                        weekday: '週六',
+                        temp: '18°C',
+                        weatherIcon: 'fa-solid fa-cloud-sun',
+                        rainProb: '20%',
+                        events: [
+                            {
+                                time: '12:00',
+                                type: 'food',
+                                title: '大溪老地方客家菜',
+                                mapUrl: 'https://www.google.com/maps/dir//Old+local+Hakka+cuisine,+No.+489%E8%99%9F%E5%93%A1%E6%9E%97%E8%B7%AF%E4%B8%80%E6%AE%B5%E5%A4%A7%E6%BA%AA%E5%8D%80,+%E6%A1%83%E5%9C%92%E5%B8%82+Taiwan/data=!4m9!4m8!1m0!1m5!1m1!19sChIJRU1SRgUYaDQRTtdqosWQG4s!2m2!1d121.2730895!2d24.891403!3e0',
+                                tips: [
+                                    { icon: 'fa-solid fa-utensils', text: '必點：脆皮油雞、客家小炒、梅干扣肉。' },
+                                    { icon: 'fa-solid fa-circle-info', text: '假日人多，建議提前確認訂位。' }
+                                ]
+                            },
+                            {
+                                time: '13:30',
+                                type: 'hotel',
+                                title: '三橋渡假旅店 (停車)',
+                                mapUrl: 'https://www.google.com/maps/dir/Old+local+Hakka+cuisine,+No.+489%E8%99%9F%E5%93%A1%E6%9E%97%E8%B7%AF%E4%B8%80%E6%AE%B5%E5%A4%A7%E6%BA%AA%E5%8D%80,+%E6%A1%83%E5%9C%92%E5%B8%82+Taiwan/%E5%8F%B0%E7%81%A3%E6%A1%83%E5%9C%92%E5%B8%82%E5%A4%A7%E6%BA%AA%E5%8D%80%E7%91%9E%E5%AE%89%E8%B7%AF%E4%B8%80%E6%AE%B5%EF%BC%91%EF%BC%96%EF%BC%98%E8%99%9F,+%E5%A4%A7%E6%BA%AA%E4%B8%89%E6%A9%8B%E6%B8%A1%E5%81%87%E6%97%85%E5%BA%97%EF%BC%8D%E6%A1%83%E5%9C%92%E6%B8%A1%E5%81%87%E9%85%92%E5%BA%97%E6%8E%A8%E8%96%A6+%E4%BA%BA%E6%B0%A3%E9%A3%AF%E5%BA%97+%E8%A6%AA%E5%AD%90%E8%87%AA%E7%94%B1%E8%A1%8C+%E5%92%96%E5%95%A1%E5%BB%B3+%E7%A9%BA%E4%B8%AD%E6%99%AF%E8%A7%80%E9%A4%90%E5%BB%B3+%E7%B6%B2%E7%BE%8E%E6%89%93%E5%8D%A1+%E5%95%86%E6%97%85+%E8%A8%82%E6%88%BF%E5%83%B9%E6%A0%BC+%E9%A6%96%E9%81%B8+%E8%A9%95%E5%83%B9+%E7%84%A1%E8%8F%B8%E6%88%BF+%E8%BC%95%E6%97%85%E8%A1%8C+%E5%9C%98%E9%AB%94%E5%84%AA%E6%83%A0+%E5%A4%A7%E6%BA%AA%E6%83%85%E4%BA%BA%E6%A9%8B+%E5%A4%A7%E6%BA%AA%E7%99%BE%E5%B9%B4%E8%80%81%E8%A1%97+%E4%B8%AD%E5%BA%84%E5%90%8A%E6%A9%8B+%E9%BD%8B%E6%98%8E%E5%AF%BA%E5%8F%A4%E9%81%93/data=!4m14!4m13!1m5!1m1!19sChIJRU1SRgUYaDQRTtdqosWQG4s!2m2!1d121.2730895!2d24.891403!1m5!1m1!19sChIJnR3w3OsZaDQRp1zYjDHkLGE!2m2!1d121.27876649999999!2d24.8882987!3e0',
+                                tips: [{ icon: 'fa-solid fa-car', text: '先寄放行李與車輛，輕裝出發。' }]
+                            },
+                            {
+                                time: '14:00',
+                                type: 'sight',
+                                title: '大溪橋 & 木藝博物館',
+                                mapUrl: 'https://www.google.com/maps/dir/%E5%8F%B0%E7%81%A3%E6%A1%83%E5%9C%92%E5%B8%82%E5%A4%A7%E6%BA%AA%E5%8D%80%E7%91%9E%E5%AE%89%E8%B7%AF%E4%B8%80%E6%AE%B5%EF%BC%91%EF%BC%96%EF%BC%98%E8%99%9F,+%E5%A4%A7%E6%BA%AA%E4%B8%89%E6%A9%8B%E6%B8%A1%E5%81%87%E6%97%85%E5%BA%97%EF%BC%8D%E6%A1%83%E5%9C%92%E6%B8%A1%E5%81%87%E9%85%92%E5%BA%97%E6%8E%A8%E8%96%A6+%E4%BA%BA%E6%B0%A3%E9%A3%AF%E5%BA%97+%E8%A6%AA%E5%AD%90%E8%87%AA%E7%94%B1%E8%A1%8C+%E5%92%96%E5%95%A1%E5%BB%B3+%E7%A9%BA%E4%B8%AD%E6%99%AF%E8%A7%80%E9%A4%90%E5%BB%B3+%E7%B6%B2%E7%BE%8E%E6%89%93%E5%8D%A1+%E5%95%86%E6%97%85+%E8%A8%82%E6%88%BF%E5%83%B9%E6%A0%BC+%E9%A6%96%E9%81%B8+%E8%A9%95%E5%83%B9+%E7%84%A1%E8%8F%B8%E6%88%BF+%E8%BC%95%E6%97%85%E8%A1%8C+%E5%9C%98%E9%AB%94%E5%84%AA%E6%83%A0+%E5%A4%A7%E6%BA%AA%E6%83%85%E4%BA%BA%E6%A9%8B+%E5%A4%A7%E6%BA%AA%E7%99%BE%E5%B9%B4%E8%80%81%E8%A1%97+%E4%B8%AD%E5%BA%84%E5%90%8A%E6%A9%8B+%E9%BD%8B%E6%98%8E%E5%AF%BA%E5%8F%A4%E9%81%93/%E5%8F%B0%E6%B9%BE%E6%A1%83%E5%9C%92%E5%B8%82%E5%A4%A7%E6%BA%AA%E5%8D%80%E6%99%AE%E6%BF%9F%E8%B7%AF11%E8%99%9F,+%E8%BE%A6%E5%85%AC%E5%AE%A4,+%E5%BE%8C%E6%A3%9F2%E6%A8%93,+Daxi+Wood+Art+Ecomuseum,+Taoyuan/data=!4m14!4m13!1m5!1m1!19sChIJnR3w3OsZaDQRp1zYjDHkLGE!2m2!1d121.27876649999999!2d24.8882987!1m5!1m1!19sChIJTcY5OiAYaDQRajctdjMUaH0!2m2!1d121.28671709999999!2d24.8807421!3e2',
+                                photoSpot: true,
+                                tips: [
+                                    { icon: 'fa-solid fa-route', text: '步行路線：大溪橋 -> 鳳飛飛故事館 -> 壹號館。' },
+                                    { icon: 'fa-solid fa-camera', text: '推薦：大溪橋巴洛克式牌樓，傍晚點燈超美。' }
+                                ]
+                            },
+                            {
+                                time: '17:30',
+                                type: 'food',
+                                title: '啡嚐食機',
+                                mapUrl: 'https://www.google.com/maps/dir/%E5%8F%B0%E6%B9%BE%E6%A1%83%E5%9C%92%E5%B8%82%E5%A4%A7%E6%BA%AA%E5%8D%80%E6%99%AE%E6%BF%9F%E8%B7%AF11%E8%99%9F,+%E8%BE%A6%E5%85%AC%E5%AE%A4,+%E5%BE%8C%E6%A3%9F2%E6%A8%93,+Daxi+Wood+Art+Ecomuseum,+Taoyuan/%E5%8F%B0%E7%81%A3%E6%A1%83%E5%9C%92%E5%B8%82%E5%A4%A7%E6%BA%AA%E5%8D%80%E7%99%BB%E9%BE%8D%E8%B7%AF5-17%E8%99%9F,+%E5%95%A1%E5%9A%90%E9%A3%9F%E6%A9%9F/data=!4m14!4m13!1m5!1m1!19sChIJTcY5OiAYaDQRajctdjMUaH0!2m2!1d121.28671709999999!2d24.8807421!1m5!1m1!19sChIJR9S_0CEYaDQRnAuqOy-Mfs4!2m2!1d121.28565359999999!2d24.8826236!3e2',
+                                tips: [{ icon: 'fa-solid fa-wine-glass', text: '景觀餐廳，可欣賞大溪夜景。' }]
+                            },
+                            {
+                                time: '18:30',
+                                type: 'hotel',
+                                title: '返回飯店 Check-in',
+                                mapUrl: '#',
+                                tips: []
+                            }
+                        ]
+                    },
+                    {
+                        date: '2/8',
+                        weekday: '週日',
+                        temp: '17°C',
+                        weatherIcon: 'fa-solid fa-cloud',
+                        rainProb: '30%',
+                        events: [
+                            {
+                                time: '10:00',
+                                type: 'sight',
+                                title: '山豬湖生態親水園區',
+                                mapUrl: 'https://www.google.com/maps/dir/%E5%8F%B0%E7%81%A3%E6%A1%83%E5%9C%92%E5%B8%82%E5%A4%A7%E6%BA%AA%E5%8D%80%E7%91%9E%E5%AE%89%E8%B7%AF%E4%B8%80%E6%AE%B5%EF%BC%91%EF%BC%96%EF%BC%98%E8%99%9F,+%E5%A4%A7%E6%BA%AA%E4%B8%89%E6%A9%8B%E6%B8%A1%E5%81%87%E6%97%85%E5%BA%97%EF%BC%8D%E6%A1%83%E5%9C%92%E6%B8%A1%E5%81%87%E9%85%92%E5%BA%97%E6%8E%A8%E8%96%A6+%E4%BA%BA%E6%B0%A3%E9%A3%AF%E5%BA%97+%E8%A6%AA%E5%AD%90%E8%87%AA%E7%94%B1%E8%A1%8C+%E5%92%96%E5%95%A1%E5%BB%B3+%E7%A9%BA%E4%B8%AD%E6%99%AF%E8%A7%80%E9%A4%90%E5%BB%B3+%E7%B6%B2%E7%BE%8E%E6%89%93%E5%8D%A1+%E5%95%86%E6%97%85+%E8%A8%82%E6%88%BF%E5%83%B9%E6%A0%BC+%E9%A6%96%E9%81%B8+%E8%A9%95%E5%83%B9+%E7%84%A1%E8%8F%B8%E6%88%BF+%E8%BC%95%E6%97%85%E8%A1%8C+%E5%9C%98%E9%AB%94%E5%84%AA%E6%83%A0+%E5%A4%A7%E6%BA%AA%E6%83%85%E4%BA%BA%E6%A9%8B+%E5%A4%A7%E6%BA%AA%E7%99%BE%E5%B9%B4%E8%80%81%E8%A1%97+%E4%B8%AD%E5%BA%84%E5%90%8A%E6%A9%8B+%E9%BD%8B%E6%98%8E%E5%AF%BA%E5%8F%A4%E9%81%93/%E5%8F%B0%E7%81%A3%E6%A1%83%E5%9C%92%E5%B8%82%E5%A4%A7%E6%BA%AA%E5%8D%80,+%E5%A4%A7%E6%BC%A2%E6%BA%AA%E5%B1%B1%E8%B1%AC%E6%B9%96%E7%94%9F%E6%85%8B%E8%A6%AA%E6%B0%B4%E5%9C%92%E5%8D%80/data=!4m14!4m13!1m5!1m1!19sChIJnR3w3OsZaDQRp1zYjDHkLGE!2m2!1d121.27876649999999!2d24.8882987!1m5!1m1!19sChIJgYuMHPAZaDQRGLuAoxbKEBc!2m2!1d121.3035036!2d24.9037835!3e0',
+                                photoSpot: true,
+                                tips: [
+                                    { icon: 'fa-solid fa-leaf', text: '亮點：中庄吊橋 (白色極簡風，好拍)。' },
+                                    { icon: 'fa-solid fa-shoe-prints', text: '路面平緩，適合長輩散步。' }
+                                ]
+                            },
+                            {
+                                time: '12:00',
+                                type: 'food',
+                                title: '山豬湖土雞城',
+                                mapUrl: 'https://www.google.com/maps/dir/%E5%8F%B0%E7%81%A3%E6%A1%83%E5%9C%92%E5%B8%82%E5%A4%A7%E6%BA%AA%E5%8D%80,+%E5%A4%A7%E6%BC%A2%E6%BA%AA%E5%B1%B1%E8%B1%AC%E6%B9%96%E7%94%9F%E6%85%8B%E8%A6%AA%E6%B0%B4%E5%9C%92%E5%8D%80/%E5%8F%B0%E7%81%A3%E6%A1%83%E5%9C%92%E5%B8%82%E5%A4%A7%E6%BA%AA%E5%8D%80%E4%BF%A1%E7%BE%A9%E8%B7%AF525%E5%B7%B710%E5%BC%84292%E8%99%9F,+%E5%B1%B1%E8%B1%AC%E6%B9%96%E5%9C%9F%E9%9B%9E%E5%9F%8E/data=!4m14!4m13!1m5!1m1!19sChIJgYuMHPAZaDQRGLuAoxbKEBc!2m2!1d121.3035036!2d24.9037835!1m5!1m1!19sChIJOYmcNjYYaDQRwkpKDy7d1Ho!2m2!1d121.30362819999999!2d24.9008917!3e2',
+                                tips: [{ icon: 'fa-solid fa-thumbs-up', text: '招牌：白斬雞肉質Q彈，野菜新鮮。' }]
+                            },
+                            {
+                                time: '13:30',
+                                type: 'sight',
+                                title: '月眉人工濕地落羽松',
+                                mapUrl: '#',
+                                photoSpot: true,
+                                tips: [{ icon: 'fa-solid fa-tree', text: '攝影熱點：水中落羽松倒影。' }]
+                            },
+                            {
+                                time: '18:00',
+                                type: 'food',
+                                title: '全家福海鮮餐廳',
+                                mapUrl: 'https://www.google.com/maps/dir/%E5%8F%B0%E7%81%A3%E6%A1%83%E5%9C%92%E5%B8%82%E5%A4%A7%E6%BA%AA%E5%8D%80%E7%91%9E%E5%AE%89%E8%B7%AF%E4%B8%80%E6%AE%B5%EF%BC%91%EF%BC%96%EF%BC%98%E8%99%9F,+%E5%A4%A7%E6%BA%AA%E4%B8%89%E6%A9%8B%E6%B8%A1%E5%81%87%E6%97%85%E5%BA%97%EF%BC%8D%E6%A1%83%E5%9C%92%E6%B8%A1%E5%81%87%E9%85%92%E5%BA%97%E6%8E%A8%E8%96%A6+%E4%BA%BA%E6%B0%A3%E9%A3%AF%E5%BA%97+%E8%A6%AA%E5%AD%90%E8%87%AA%E7%94%B1%E8%A1%8C+%E5%92%96%E5%95%A1%E5%BB%B3+%E7%A9%BA%E4%B8%AD%E6%99%AF%E8%A7%80%E9%A4%90%E5%BB%B3+%E7%B6%B2%E7%BE%8E%E6%89%93%E5%8D%A1+%E5%95%86%E6%97%85+%E8%A8%82%E6%88%BF%E5%83%B9%E6%A0%BC+%E9%A6%96%E9%81%B8+%E8%A9%95%E5%83%B9+%E7%84%A1%E8%8F%B8%E6%88%BF+%E8%BC%95%E6%97%85%E8%A1%8C+%E5%9C%98%E9%AB%94%E5%84%AA%E6%83%A0+%E5%A4%A7%E6%BA%AA%E6%83%85%E4%BA%BA%E6%A9%8B+%E5%A4%A7%E6%BA%AA%E7%99%BE%E5%B9%B4%E8%80%81%E8%A1%97+%E4%B8%AD%E5%BA%84%E5%90%8A%E6%A9%8B+%E9%BD%8B%E6%98%8E%E5%AF%BA%E5%8F%A4%E9%81%93/%E5%8F%B0%E6%B9%BE%E6%A1%83%E5%9C%92%E5%B8%82%E5%A4%A7%E6%BA%AA%E5%8D%80%E7%91%9E%E5%AE%89%E8%B7%AF%E4%B8%80%E6%AE%B5308%E8%99%9F,+%E5%9F%BA%E9%9A%86%E5%85%A8%E5%AE%B6%E7%A6%8F%E6%B5%B7%E9%AE%AE%E9%A4%90%E5%BB%B3+%E5%A4%A7%E6%BA%AA%E5%88%86%E5%BA%97/data=!4m14!4m13!1m5!1m1!19sChIJnR3w3OsZaDQRp1zYjDHkLGE!2m2!1d121.27876649999999!2d24.8882987!1m5!1m1!19sChIJh35SqR4YaDQRyZ0M4U8Q3WE!2m2!1d121.2801686!2d24.885059!3e2',
+                                tips: [{ icon: 'fa-solid fa-fish', text: '推薦：生魚片冷盤、清蒸鮮魚。' }]
+                            }
+                        ]
+                    },
+                    {
+                        date: '2/9',
+                        weekday: '週一',
+                        temp: '19°C',
+                        weatherIcon: 'fa-solid fa-sun',
+                        rainProb: '10%',
+                        events: [
+                            {
+                                time: '10:00',
+                                type: 'transport',
+                                title: '前往巧克力共和國',
+                                mapUrl: 'https://www.google.com/maps/dir/%E5%8F%B0%E7%81%A3%E6%A1%83%E5%9C%92%E5%B8%82%E5%A4%A7%E6%BA%AA%E5%8D%80%E7%91%9E%E5%AE%89%E8%B7%AF%E4%B8%80%E6%AE%B5%EF%BC%91%EF%BC%96%EF%BC%98%E8%99%9F,+%E5%A4%A7%E6%BA%AA%E4%B8%89%E6%A9%8B%E6%B8%A1%E5%81%87%E6%97%85%E5%BA%97%EF%BC%8D%E6%A1%83%E5%9C%92%E6%B8%A1%E5%81%87%E9%85%92%E5%BA%97%E6%8E%A8%E8%96%A6+%E4%BA%BA%E6%B0%A3%E9%A3%AF%E5%BA%97+%E8%A6%AA%E5%AD%90%E8%87%AA%E7%94%B1%E8%A1%8C+%E5%92%96%E5%95%A1%E5%BB%B3+%E7%A9%BA%E4%B8%AD%E6%99%AF%E8%A7%80%E9%A4%90%E5%BB%B3+%E7%B6%B2%E7%BE%8E%E6%89%93%E5%8D%A1+%E5%95%86%E6%97%85+%E8%A8%82%E6%88%BF%E5%83%B9%E6%A0%BC+%E9%A6%96%E9%81%B8+%E8%A9%95%E5%83%B9+%E7%84%A1%E8%8F%B8%E6%88%BF+%E8%BC%95%E6%97%85%E8%A1%8C+%E5%9C%98%E9%AB%94%E5%84%AA%E6%83%A0+%E5%A4%A7%E6%BA%AA%E6%83%85%E4%BA%BA%E6%A9%8B+%E5%A4%A7%E6%BA%AA%E7%99%BE%E5%B9%B4%E8%80%81%E8%A1%97+%E4%B8%AD%E5%BA%84%E5%90%8A%E6%A9%8B+%E9%BD%8B%E6%98%8E%E5%AF%BA%E5%8F%A4%E9%81%93/Republic+of+Chocolate,+No.+177%E8%99%9F%E5%B7%A7%E5%85%8B%E5%8A%9B%E8%A1%97%E5%85%AB%E5%BE%B7%E5%8D%80,+%E6%A1%83%E5%9C%92%E5%B8%82+Taiwan/data=!4m14!4m13!1m5!1m1!19sChIJnR3w3OsZaDQRp1zYjDHkLGE!2m2!1d121.27876649999999!2d24.8882987!1m5!1m1!19sChIJ96H7-OoYaDQROPdHKCsGUsg!2m2!1d121.291111!2d24.9411044!3e0',
+                                tips: []
+                            },
+                            {
+                                time: '10:30',
+                                type: 'sight',
+                                title: '巧克力共和國',
+                                mapUrl: '#',
+                                photoSpot: true,
+                                tips: [
+                                    { icon: 'fa-solid fa-gift', text: '必買：工廠限定版77乳加、薄片巧克力。' },
+                                    { icon: 'fa-solid fa-hand-sparkles', text: '親子活動：DIY 巧克力課程 (建議預約)。' }
+                                ]
+                            },
+                            {
+                                time: '12:00',
+                                type: 'food',
+                                title: '歐米茄義式料理',
+                                mapUrl: 'https://www.google.com/maps/dir/Republic+of+Chocolate,+No.+177%E8%99%9F%E5%B7%A7%E5%85%8B%E5%8A%9B%E8%A1%97%E5%85%AB%E5%BE%B7%E5%8D%80,+%E6%A1%83%E5%9C%92%E5%B8%82+Taiwan/%E5%8F%B0%E7%81%A3%E6%A1%83%E5%9C%92%E5%B8%82%E5%85%AB%E5%BE%B7%E5%8D%80%E5%BB%A3%E8%88%88%E8%B7%AF50%E8%99%9F,+%E6%AD%90%E7%B1%B3%E8%8C%84%E7%BE%A9%E5%BC%8F%E6%96%99%E7%90%86%EF%BC%88%E4%B8%8B%E5%8D%88%E4%B8%89%E9%BB%9E%E5%88%B0%E4%BA%94%E9%BB%9E%E9%9B%BB%E8%A9%B1%E7%84%A1%E4%BA%BA%E6%8E%A5%E8%81%BD%EF%BC%89/data=!4m14!4m13!1m5!1m1!19sChIJ96H7-OoYaDQROPdHKCsGUsg!2m2!1d121.291111!2d24.9411044!1m5!1m1!19sChIJPetYJeEjaDQRnwbmwZXtNBg!2m2!1d121.28465999999999!2d24.932146!3e0',
+                                tips: [{ icon: 'fa-solid fa-pizza-slice', text: '推薦：義大利麵、燉飯。' }]
+                            },
+                            {
+                                time: '14:00',
+                                type: 'sight',
+                                title: '宏亞公司 (NG產品)',
+                                mapUrl: 'https://www.google.com/maps/dir/%E5%8F%B0%E7%81%A3%E6%A1%83%E5%9C%92%E5%B8%82%E5%85%AB%E5%BE%B7%E5%8D%80%E5%BB%A3%E8%88%88%E8%B7%AF50%E8%99%9F,+%E6%AD%90%E7%B1%B3%E8%8C%84%E7%BE%A9%E5%BC%8F%E6%96%99%E7%90%86%EF%BC%88%E4%B8%8B%E5%8D%88%E4%B8%89%E9%BB%9E%E5%88%B0%E4%BA%94%E9%BB%9E%E9%9B%BB%E8%A9%B1%E7%84%A1%E4%BA%BA%E6%8E%A5%E8%81%BD%EF%BC%89/%E5%8F%B0%E7%81%A3%E6%A1%83%E5%9C%92%E5%B8%82%E5%85%AB%E5%BE%B7%E5%8D%80%E5%BB%BA%E5%9C%8B%E8%B7%AF386%E8%99%9F,+%E5%AE%8F%E4%BA%9E%E9%A3%9F%E5%93%81%E5%B7%A5%E5%BB%A0/data=!4m14!4m13!1m5!1m1!19sChIJPetYJeEjaDQRnwbmwZXtNBg!2m2!1d121.28465999999999!2d24.932146!1m5!1m1!19sChIJ96H7-OoYaDQRfp4Gv9WY3cQ!2m2!1d121.28819949999999!2d24.9401053!3e0',
+                                tips: [{ icon: 'fa-solid fa-cart-shopping', text: '內行攻略：這裡買NG品最划算！' }]
+                            }
+                        ]
+                    }
+                ]
             }
-        );
-    }
-
-    async function fetchWeather(lat, lon) {
-        const widget = document.getElementById('weather-widget');
-        // Main Card Elements
-        const locEl = document.getElementById('weather-loc');
-        const tempEl = document.getElementById('weather-temp');
-        const iconEl = document.getElementById('weather-icon');
-        const descEl = document.getElementById('weather-desc');
-        const tomIconEl = document.getElementById('weather-tomorrow-icon');
-        const tomTempEl = document.getElementById('weather-tomorrow-temp');
-
-        try {
-            // 1. Get Weather (Current + Daily)
-            const res = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current_weather=true&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=auto`);
-            const data = await res.json();
-            
-            // Current
-            const current = data.current_weather;
-            const temp = Math.round(current.temperature);
-            const code = current.weathercode;
-            const { icon, text } = getWeatherStatus(code);
-
-            // Tomorrow (Index 1)
-            const daily = data.daily;
-            const tomCode = daily.weathercode[1];
-            const tomMax = Math.round(daily.temperature_2m_max[1]);
-            const tomMin = Math.round(daily.temperature_2m_min[1]);
-            const tomStatus = getWeatherStatus(tomCode);
-
-            // Update Header Widget
-            widget.innerHTML = `<span>${icon} 現在氣溫 ${temp}°C ${text}</span>`;
-            widget.classList.add('visible');
-
-            // Update Main Card
-            if(tempEl) {
-                tempEl.innerText = `${temp}°C`;
-                iconEl.innerText = icon;
-                descEl.innerText = text;
-                tomIconEl.innerText = tomStatus.icon;
-                tomTempEl.innerText = `${tomMin}°C - ${tomMax}°C`;
-            }
-
-            // 2. Get Location Name (Reverse Geocoding)
-            const geoRes = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}`);
-            const geoData = await geoRes.json();
-            const city = geoData.address.city || geoData.address.town || geoData.address.village || geoData.address.county || "未知地點";
-            
-            if(locEl) locEl.innerText = `📍 ${city}`;
-            
-        } catch (e) {
-            console.error("Weather API Error:", e);
-            widget.innerHTML = "<span>⚠️ 天氣資訊暫時無法使用</span>";
-            widget.classList.add('visible');
         }
-    }
-
-    function getWeatherStatus(code) {
-        // WMO Weather interpretation codes
-        if (code === 0) return { icon: '☀️', text: '晴朗' };
-        if (code >= 1 && code <= 3) return { icon: '⛅', text: '多雲' };
-        if (code >= 45 && code <= 48) return { icon: '🌫️', text: '有霧' };
-        if (code >= 51 && code <= 67) return { icon: '🌧️', text: '有雨' };
-        if (code >= 71 && code <= 77) return { icon: '❄️', text: '下雪' };
-        if (code >= 80 && code <= 82) return { icon: '🌦️', text: '陣雨' };
-        if (code >= 95) return { icon: '⛈️', text: '雷雨' };
-        return { icon: '🌡️', text: '' };
-    }
-
-    // --- Currency Converter ---
-    const EXCHANGE_RATE = 0.22; // 1 JPY = 0.22 TWD (可根據需求調整)
-
-    function convertCurrency(source) {
-        const jpyInput = document.getElementById('calc-jpy');
-        const twdInput = document.getElementById('calc-twd');
-
-        if (source === 'jpy') {
-            const jpy = parseFloat(jpyInput.value);
-            if (!isNaN(jpy)) {
-                twdInput.value = Math.round(jpy * EXCHANGE_RATE);
-            } else {
-                twdInput.value = '';
-            }
-        } else {
-            const twd = parseFloat(twdInput.value);
-            if (!isNaN(twd)) {
-                jpyInput.value = Math.round(twd / EXCHANGE_RATE);
-            } else {
-                jpyInput.value = '';
-            }
-        }
-    }
-
-</script>
-
+    </script>
 </body>
 </html>
