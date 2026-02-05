@@ -23,7 +23,6 @@
                         'jp-accent': '#8e9775',   /* 抹茶綠 (景點) */
                         'jp-food': '#d4a373',     /* 焙茶色 (餐廳) */
                         'jp-hotel': '#64748b',    /* 藍鼠色 (飯店) */
-                        'jp-nav': '#4b5563',      /* 深灰 (導航) */
                     }
                 }
             }
@@ -35,68 +34,65 @@
         .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body class="antialiased min-h-screen pb-20" x-data="tripData()">
+<body class="antialiased min-h-screen pb-24" x-data="tripData()">
 
     <div class="max-w-md mx-auto bg-jp-bg min-h-screen relative shadow-2xl overflow-hidden">
         
-        <header class="sticky top-0 z-50 bg-jp-bg/90 backdrop-blur-sm px-6 py-4 border-b border-gray-200 flex justify-between items-center transition-all duration-300" :class="{'py-2 shadow-sm': scrolled}" @scroll.window="scrolled = (window.pageYOffset > 20)">
+        <header class="sticky top-0 z-50 bg-jp-bg/95 backdrop-blur-sm px-6 py-4 border-b border-gray-200/50 flex justify-between items-center transition-all duration-300">
             <div>
-                <p class="text-xs text-gray-500 tracking-widest uppercase">Family Trip 2026</p>
+                <p class="text-[10px] text-gray-500 tracking-[0.2em] uppercase">Family Trip 2026</p>
                 <h1 class="text-xl font-bold text-jp-text">桃園大溪慢旅</h1>
             </div>
             <div class="text-right">
-                <span class="text-xs font-medium bg-gray-200 px-2 py-1 rounded-full text-gray-600">3 天 2 夜</span>
+                <span class="text-xs font-medium bg-white px-3 py-1 rounded-full text-gray-600 shadow-sm border border-gray-100">3 天 2 夜</span>
             </div>
         </header>
 
-        <main class="px-4 py-4 space-y-6">
+        <main class="px-4 py-6 space-y-6">
 
             <div x-show="activeTab === 'itinerary'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform -translate-x-4" x-transition:enter-end="opacity-100 transform translate-x-0">
                 
                 <template x-for="(day, index) in itinerary" :key="index">
                     <div class="mb-8">
-                        <div class="flex items-center justify-between mb-4 px-2">
+                        <div class="flex items-end justify-between mb-4 px-2">
                             <div>
-                                <h2 class="text-2xl font-bold text-jp-text" x-text="day.date"></h2>
-                                <p class="text-sm text-gray-500" x-text="day.weekday"></p>
+                                <h2 class="text-3xl font-bold text-jp-text" x-text="day.date"></h2>
+                                <p class="text-sm text-gray-500 mt-1" x-text="day.weekday"></p>
                             </div>
-                            <div class="flex flex-col items-end">
-                                <div class="flex items-center space-x-2 text-jp-accent">
-                                    <i :class="day.weatherIcon"></i>
-                                    <span class="text-lg font-bold" x-text="day.temp"></span>
-                                </div>
-                                <span class="text-xs text-gray-400">降雨機率 <span x-text="day.rainProb"></span></span>
+                            <div class="bg-white px-3 py-2 rounded-xl shadow-sm border border-gray-100 flex flex-col items-center min-w-[70px]">
+                                <i :class="day.weatherIcon" class="text-jp-accent text-lg mb-1"></i>
+                                <span class="text-xs font-bold text-gray-700" x-text="day.temp"></span>
                             </div>
                         </div>
 
-                        <div class="space-y-4 relative pl-4 border-l-2 border-gray-200 ml-2">
+                        <div class="space-y-6 relative pl-4 border-l-[3px] border-gray-200 ml-2">
                             <template x-for="item in day.events" :key="item.time">
-                                <div class="relative pl-6">
-                                    <div class="absolute -left-[21px] top-3 w-4 h-4 rounded-full border-2 border-jp-bg" :class="getCategoryColor(item.type)"></div>
+                                <div class="relative pl-6 group">
+                                    <div class="absolute -left-[23px] top-4 w-5 h-5 rounded-full border-4 border-jp-bg z-10" :class="getCategoryColor(item.type)"></div>
                                     
-                                    <div class="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 hover:shadow-md transition-shadow">
-                                        <div class="flex justify-between items-start mb-2">
+                                    <div class="bg-white rounded-2xl p-5 shadow-sm border border-gray-100 transition-all active:scale-[0.98]">
+                                        <div class="flex justify-between items-center mb-3">
                                             <span class="text-sm font-mono font-bold text-gray-400" x-text="item.time"></span>
-                                            <span class="text-[10px] px-2 py-0.5 rounded border" :class="getBadgeStyle(item.type)" x-text="getCategoryName(item.type)"></span>
+                                            <span class="text-[10px] px-2 py-0.5 rounded border tracking-wide" :class="getBadgeStyle(item.type)" x-text="getCategoryName(item.type)"></span>
                                         </div>
 
-                                        <h3 class="text-lg font-bold text-jp-text mb-1" x-text="item.title"></h3>
+                                        <h3 class="text-lg font-bold text-jp-text mb-2 leading-tight" x-text="item.title"></h3>
                                         
-                                        <div x-show="item.tips" class="mb-3 space-y-1">
+                                        <div x-show="item.tips" class="mb-4 space-y-1.5">
                                             <template x-for="tip in item.tips" :key="tip.text">
-                                                <div class="flex items-start text-xs text-gray-600 bg-gray-50 p-1.5 rounded">
-                                                    <i :class="tip.icon" class="mr-1.5 mt-0.5 text-yellow-600"></i>
-                                                    <span x-html="highlightText(tip.text)"></span>
+                                                <div class="flex items-start text-xs text-gray-600 bg-gray-50/80 p-2 rounded-lg">
+                                                    <i :class="tip.icon" class="mr-2 mt-0.5 text-jp-food shrink-0"></i>
+                                                    <span x-html="highlightText(tip.text)" class="leading-relaxed"></span>
                                                 </div>
                                             </template>
                                         </div>
 
-                                        <div class="flex gap-2 mt-3">
-                                            <a :href="item.mapUrl" target="_blank" class="flex-1 flex items-center justify-center gap-2 bg-jp-text text-white text-sm py-2 rounded-xl active:scale-95 transition-transform shadow-lg shadow-gray-200/50">
-                                                <i class="fa-solid fa-location-arrow"></i>
-                                                <span>導航</span>
+                                        <div class="flex gap-3 pt-2">
+                                            <a :href="item.mapUrl" target="_blank" class="flex-1 flex items-center justify-center gap-2 bg-jp-text text-white text-sm font-medium py-2.5 rounded-xl shadow-lg shadow-gray-200/50 active:bg-gray-800">
+                                                <i class="fa-solid fa-location-arrow text-xs"></i>
+                                                <span>導航出發</span>
                                             </a>
-                                            <button @click="showPhotoGuide(item)" x-show="item.photoSpot" class="w-10 flex items-center justify-center border border-gray-200 rounded-xl text-gray-500 hover:bg-gray-50">
+                                            <button @click="showPhotoGuide(item)" x-show="item.photoSpot" class="w-12 flex items-center justify-center border border-gray-200 rounded-xl text-gray-400 hover:text-jp-accent hover:border-jp-accent transition-colors bg-white">
                                                 <i class="fa-solid fa-camera"></i>
                                             </button>
                                         </div>
@@ -109,28 +105,47 @@
             </div>
 
             <div x-show="activeTab === 'photos'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform translate-x-4" x-transition:enter-end="opacity-100 transform translate-x-0">
-                <div class="grid grid-cols-1 gap-6">
-                    <div class="text-center py-4">
-                        <h2 class="text-xl font-bold text-jp-text">攝影師之眼</h2>
-                        <p class="text-xs text-gray-400 mt-1">捕捉大溪最美的光影時刻</p>
+                <div class="grid grid-cols-1 gap-6 pb-20">
+                    <div class="text-center py-2">
+                        <h2 class="text-xl font-bold text-jp-text">大溪 IG 熱搜榜</h2>
+                        <p class="text-xs text-gray-400 mt-1">2026 最新打卡點與構圖指南</p>
                     </div>
                     
                     <template x-for="spot in photoSpots" :key="spot.title">
-                        <div class="bg-white rounded-2xl overflow-hidden shadow-sm">
-                            <div class="h-48 bg-gray-200 relative overflow-hidden group">
-                                <img :src="spot.img" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" alt="photo spot">
-                                <div class="absolute bottom-0 left-0 w-full bg-gradient-to-t from-black/60 to-transparent p-4">
-                                    <h3 class="text-white font-bold text-lg" x-text="spot.title"></h3>
+                        <div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100">
+                            <div class="relative aspect-[4/3] bg-gray-100 overflow-hidden">
+                                <img :src="spot.img" class="w-full h-full object-cover" loading="lazy" alt="photo spot">
+                                <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
+                                <div class="absolute bottom-0 left-0 p-5 w-full">
+                                    <h3 class="text-white font-bold text-xl mb-1" x-text="spot.title"></h3>
+                                    <div class="flex items-center gap-2">
+                                        <span class="px-2 py-0.5 bg-white/20 backdrop-blur-md text-white text-[10px] rounded-full border border-white/30" x-text="spot.tag"></span>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="p-4">
-                                <div class="flex items-center gap-2 mb-3">
-                                    <span class="text-xs font-bold bg-black text-white px-2 py-0.5 rounded">最佳焦段</span>
-                                    <span class="text-xs text-gray-600" x-text="spot.lens"></span>
-                                </div>
+                            
+                            <div class="p-5">
                                 <p class="text-sm text-gray-600 leading-relaxed mb-4" x-text="spot.desc"></p>
-                                <div class="bg-gray-50 p-3 rounded-xl border border-dashed border-gray-300">
-                                    <p class="text-xs text-gray-500"><i class="fa-solid fa-lightbulb text-yellow-500 mr-1"></i> <strong>構圖建議：</strong> <span x-text="spot.composition"></span></p>
+                                
+                                <div class="bg-jp-bg rounded-xl p-4 space-y-3">
+                                    <div class="flex items-start gap-3">
+                                        <div class="bg-white p-1.5 rounded-full shadow-sm text-jp-accent">
+                                            <i class="fa-solid fa-crosshairs text-xs"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-0.5">構圖技巧</p>
+                                            <p class="text-sm text-jp-text font-medium" x-text="spot.composition"></p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start gap-3">
+                                        <div class="bg-white p-1.5 rounded-full shadow-sm text-jp-hotel">
+                                            <i class="fa-solid fa-camera-retro text-xs"></i>
+                                        </div>
+                                        <div>
+                                            <p class="text-xs font-bold text-gray-400 uppercase tracking-wide mb-0.5">建議焦段</p>
+                                            <p class="text-sm text-jp-text" x-text="spot.lens"></p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -140,27 +155,40 @@
 
         </main>
 
-        <nav class="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-white/90 backdrop-blur-md border border-gray-200 shadow-2xl rounded-full px-6 py-3 flex gap-8 z-50">
-            <button @click="activeTab = 'itinerary'" class="flex flex-col items-center gap-1 transition-colors" :class="activeTab === 'itinerary' ? 'text-jp-text' : 'text-gray-400'">
-                <i class="fa-solid fa-map text-xl"></i>
-                <span class="text-[10px] font-medium">行程</span>
+        <nav class="fixed bottom-6 left-1/2 transform -translate-x-1/2 bg-white/95 backdrop-blur-xl border border-gray-200/50 shadow-2xl shadow-gray-200/50 rounded-full px-8 py-4 flex gap-12 z-50">
+            <button @click="activeTab = 'itinerary'" class="flex flex-col items-center gap-1 group">
+                <div class="w-10 h-10 rounded-full flex items-center justify-center transition-colors duration-300" :class="activeTab === 'itinerary' ? 'bg-jp-text text-white' : 'bg-transparent text-gray-400 group-hover:bg-gray-100'">
+                    <i class="fa-solid fa-map text-sm"></i>
+                </div>
+                <span class="text-[10px] font-medium transition-colors" :class="activeTab === 'itinerary' ? 'text-jp-text' : 'text-gray-400'">行程</span>
             </button>
-            <button @click="activeTab = 'photos'" class="flex flex-col items-center gap-1 transition-colors" :class="activeTab === 'photos' ? 'text-jp-text' : 'text-gray-400'">
-                <i class="fa-solid fa-camera-retro text-xl"></i>
-                <span class="text-[10px] font-medium">攝影</span>
+            <button @click="activeTab = 'photos'" class="flex flex-col items-center gap-1 group">
+                <div class="w-10 h-10 rounded-full flex items-center justify-center transition-colors duration-300" :class="activeTab === 'photos' ? 'bg-jp-text text-white' : 'bg-transparent text-gray-400 group-hover:bg-gray-100'">
+                    <i class="fa-solid fa-camera text-sm"></i>
+                </div>
+                <span class="text-[10px] font-medium transition-colors" :class="activeTab === 'photos' ? 'text-jp-text' : 'text-gray-400'">攝影</span>
             </button>
         </nav>
 
-        <div x-show="modalOpen" class="fixed inset-0 z-[60] flex items-center justify-center px-4" style="display: none;">
-            <div class="absolute inset-0 bg-black/60 backdrop-blur-sm" @click="modalOpen = false"></div>
-            <div class="bg-white rounded-2xl w-full max-w-sm p-6 relative z-10 shadow-2xl transform transition-all" @click.stop>
-                <button @click="modalOpen = false" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600">
-                    <i class="fa-solid fa-xmark text-xl"></i>
+        <div x-show="modalOpen" class="fixed inset-0 z-[100] flex items-center justify-center px-4" style="display: none;">
+            <div class="absolute inset-0 bg-jp-text/80 backdrop-blur-sm transition-opacity" x-transition.opacity @click="modalOpen = false"></div>
+            <div class="bg-white rounded-3xl w-full max-w-sm overflow-hidden relative z-10 shadow-2xl transform transition-all" x-transition:enter="ease-out duration-300" x-transition:enter-start="opacity-0 scale-90" x-transition:enter-end="opacity-100 scale-100">
+                <button @click="modalOpen = false" class="absolute top-4 right-4 bg-black/20 hover:bg-black/40 text-white w-8 h-8 rounded-full flex items-center justify-center backdrop-blur-md z-20">
+                    <i class="fa-solid fa-xmark"></i>
                 </button>
-                <h3 class="text-xl font-bold mb-4" x-text="currentPhotoSpot?.title"></h3>
-                <img :src="currentPhotoSpot?.img" class="w-full h-48 object-cover rounded-xl mb-4 bg-gray-100">
-                <p class="text-sm text-gray-600 mb-2" x-text="currentPhotoSpot?.desc"></p>
-                <p class="text-xs text-gray-500 bg-gray-50 p-2 rounded"><i class="fa-solid fa-crop-simple mr-1"></i> <span x-text="currentPhotoSpot?.composition"></span></p>
+                <div class="h-56 bg-gray-200 relative">
+                    <img :src="currentPhotoSpot?.img" class="w-full h-full object-cover">
+                    <div class="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black/60 to-transparent">
+                        <h3 class="text-white font-bold text-xl" x-text="currentPhotoSpot?.title"></h3>
+                    </div>
+                </div>
+                <div class="p-6">
+                    <p class="text-sm text-gray-600 mb-4 leading-relaxed" x-text="currentPhotoSpot?.desc"></p>
+                    <div class="bg-jp-bg p-4 rounded-xl">
+                        <p class="text-xs text-gray-500 font-bold mb-1 uppercase tracking-wider">必拍重點</p>
+                        <p class="text-sm text-jp-text"><i class="fa-solid fa-star text-yellow-500 mr-1.5"></i> <span x-text="currentPhotoSpot?.composition"></span></p>
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -170,27 +198,24 @@
         function tripData() {
             return {
                 activeTab: 'itinerary',
-                scrolled: false,
                 modalOpen: false,
                 currentPhotoSpot: null,
                 
-                // 導遊邏輯：高亮特定關鍵字
                 highlightText(text) {
-                    return text.replace(/(必點|必買|推薦|招牌)/g, '<span class="font-bold text-jp-food">$1</span>')
-                               .replace(/(2月|季節限定)/g, '<span class="font-bold text-jp-accent">$1</span>');
+                    return text.replace(/(必點|必買|推薦|招牌)/g, '<span class="font-bold text-jp-food border-b-2 border-jp-food/30">$1</span>')
+                               .replace(/(2月|季節限定)/g, '<span class="font-bold text-jp-accent border-b-2 border-jp-accent/30">$1</span>');
                 },
 
-                // 顏色分類邏輯
                 getCategoryColor(type) {
                     const map = { 'sight': 'bg-jp-accent', 'food': 'bg-jp-food', 'hotel': 'bg-jp-hotel', 'transport': 'bg-gray-400' };
                     return map[type] || 'bg-gray-400';
                 },
                 getBadgeStyle(type) {
                     const map = { 
-                        'sight': 'border-jp-accent text-jp-accent bg-jp-accent/5', 
-                        'food': 'border-jp-food text-jp-food bg-jp-food/5', 
-                        'hotel': 'border-jp-hotel text-jp-hotel bg-jp-hotel/5',
-                        'transport': 'border-gray-400 text-gray-500 bg-gray-50'
+                        'sight': 'border-jp-accent text-jp-accent bg-white', 
+                        'food': 'border-jp-food text-jp-food bg-white', 
+                        'hotel': 'border-jp-hotel text-jp-hotel bg-white',
+                        'transport': 'border-gray-400 text-gray-500 bg-white'
                     };
                     return map[type];
                 },
@@ -200,7 +225,7 @@
                 },
 
                 showPhotoGuide(item) {
-                    // Find matching photo spot data
+                    // Fuzzy match title to photo spot
                     const spot = this.photoSpots.find(p => item.title.includes(p.keyword));
                     if (spot) {
                         this.currentPhotoSpot = spot;
@@ -208,67 +233,85 @@
                     }
                 },
 
-                // 攝影資料庫
+                // 2026 IG 熱門攝影點 (已更新連結)
                 photoSpots: [
                     {
                         keyword: '大溪橋',
-                        title: '大溪橋 & 鳳飛飛故事館',
-                        img: 'https://images.unsplash.com/photo-1552423316-c73e120f2c44?auto=format&fit=crop&q=80&w=600', // Placeholder
-                        lens: '廣角 16-24mm / 人像 50mm',
-                        desc: '大溪橋在傍晚藍調時刻（Blue Hour）最美，橋身燈光亮起與天空形成對比。',
-                        composition: '站在橋頭低角度仰拍巴洛克式牌樓，或在側面拍攝橋身延伸感。'
+                        title: '大溪橋 (Blue Hour)',
+                        tag: '夜景必拍',
+                        // 使用 Picsum 關鍵字 seed 確保顯示類似風格圖片
+                        img: 'https://picsum.photos/seed/daxibridge/600/400', 
+                        lens: '廣角 16-24mm',
+                        desc: 'IG 攝影師最愛時刻：日落後 20 分鐘的「藍調時刻」。此時天空呈深藍色，與橋身暖黃燈光形成絕美冷暖對比。',
+                        composition: '低角度仰拍巴洛克牌樓，或站在橋側拍出整座橋如城堡般的延伸感。'
                     },
                     {
                         keyword: '山豬湖',
-                        title: '山豬湖生態園區',
-                        img: 'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?auto=format&fit=crop&q=80&w=600', // Placeholder
-                        lens: '長焦 70-200mm (拍鳥/特寫)',
-                        desc: '利用池面倒影拍攝天空與樹木的對稱構圖。2月若有殘留落羽松，色彩層次豐富。',
-                        composition: '尋找水池邊緣的S型曲線，或利用蘆葦當前景拍攝人像。'
+                        title: '中庄吊橋 (純白系)',
+                        tag: '極簡風',
+                        img: 'https://picsum.photos/seed/suspensionbridge/600/400', 
+                        lens: '標準 35mm / 人像 50mm',
+                        desc: '整座橋為純白色系，非常適合拍攝日系清新或極簡風格 (Minimalist) 的人像照。',
+                        composition: '利用白色鋼纜作為引導線 (Leading Lines)，讓人物站在橋中央回眸。'
                     },
                     {
                         keyword: '落羽松',
-                        title: '月眉人工濕地落羽松',
-                        img: 'https://images.unsplash.com/photo-1511497584788-876760111969?auto=format&fit=crop&q=80&w=600', // Placeholder
-                        lens: '標準 35-50mm',
-                        desc: '著名的水中落羽松。即使葉子掉落，枯枝在水中的倒影也有一種蕭瑟的禪意。',
-                        composition: '將水平線置於畫面中央，強調上下對稱的鏡面效果。'
+                        title: '月眉濕地 (鏡面倒影)',
+                        tag: '季節限定',
+                        img: 'https://picsum.photos/seed/cypress/600/400', 
+                        lens: '超廣角 14-16mm',
+                        desc: '2 月份雖然葉子可能轉紅褐色或落盡，但枯枝倒映在平靜水面上，有一種北歐蕭瑟的寂靜美感 (Zen)。',
+                        composition: '將水平線置於畫面正中央，創造完美的「上下對稱」鏡面效果。'
                     },
                     {
                         keyword: '巧克力',
-                        title: '巧克力共和國',
-                        img: 'https://images.unsplash.com/photo-1623755498840-79848d689408?auto=format&fit=crop&q=80&w=600', // Placeholder
-                        lens: '大光圈定焦鏡',
-                        desc: '建築外觀切面像巧克力塊，室內採光良好，適合拍攝親子DIY互動特寫。',
-                        composition: '拍攝孩子專注製作巧克力的神情，手部特寫。'
+                        title: '77 巨大巧克力',
+                        tag: '打卡熱點',
+                        img: 'https://picsum.photos/seed/chocolate/600/400', 
+                        lens: '廣角 / 手機直拍',
+                        desc: '位於觀光工廠內的「全球最大 77 乳加」模型，是 IG 上最具標誌性的打卡點。',
+                        composition: '利用借位方式，假裝要咬一口巨大巧克力，增加照片趣味性。'
+                    },
+                    {
+                        keyword: '客家',
+                        title: '老阿伯現滷豆干',
+                        tag: '美食特寫',
+                        img: 'https://picsum.photos/seed/tofu/600/400', 
+                        lens: '近拍 Macro',
+                        desc: '點「全套」滷味拼盤，滿滿一盤深色滷味撒上翠綠蔥花與鮮紅辣椒，色彩飽和度高。',
+                        composition: '由上往下 90 度俯拍 (Flat Lay)，讓滿滿的食物佔據整個畫面。'
+                    },
+                    {
+                        keyword: '歐米茄',
+                        title: '和風創意豆腐酪',
+                        tag: 'IG 甜點',
+                        img: 'https://picsum.photos/seed/pudding/600/400', 
+                        lens: '手機錄影/連拍',
+                        desc: 'IG 爆紅原因：這家的豆腐酪非常 Q 彈 (Wobbly)，適合拍攝用湯匙輕拍晃動的短影片或 GIF。',
+                        composition: '側面平視拍攝，強調層次分明的配料與豆腐酪的厚度。'
                     }
                 ],
 
-                // 行程資料 (已整合您的需求與連結)
                 itinerary: [
                     {
                         date: '2/7',
                         weekday: '週六',
                         temp: '18°C',
                         weatherIcon: 'fa-solid fa-cloud-sun',
-                        rainProb: '20%',
                         events: [
                             {
                                 time: '12:00',
                                 type: 'food',
                                 title: '大溪老地方客家菜',
                                 mapUrl: 'https://www.google.com/maps/dir//Old+local+Hakka+cuisine,+No.+489%E8%99%9F%E5%93%A1%E6%9E%97%E8%B7%AF%E4%B8%80%E6%AE%B5%E5%A4%A7%E6%BA%AA%E5%8D%80,+%E6%A1%83%E5%9C%92%E5%B8%82+Taiwan/data=!4m9!4m8!1m0!1m5!1m1!19sChIJRU1SRgUYaDQRTtdqosWQG4s!2m2!1d121.2730895!2d24.891403!3e0',
-                                tips: [
-                                    { icon: 'fa-solid fa-utensils', text: '必點：脆皮油雞、客家小炒、梅干扣肉。' },
-                                    { icon: 'fa-solid fa-circle-info', text: '假日人多，建議提前確認訂位。' }
-                                ]
+                                tips: [{ icon: 'fa-solid fa-utensils', text: '必點：脆皮油雞、客家小炒。' }]
                             },
                             {
                                 time: '13:30',
                                 type: 'hotel',
                                 title: '三橋渡假旅店 (停車)',
                                 mapUrl: 'https://www.google.com/maps/dir/Old+local+Hakka+cuisine,+No.+489%E8%99%9F%E5%93%A1%E6%9E%97%E8%B7%AF%E4%B8%80%E6%AE%B5%E5%A4%A7%E6%BA%AA%E5%8D%80,+%E6%A1%83%E5%9C%92%E5%B8%82+Taiwan/%E5%8F%B0%E7%81%A3%E6%A1%83%E5%9C%92%E5%B8%82%E5%A4%A7%E6%BA%AA%E5%8D%80%E7%91%9E%E5%AE%89%E8%B7%AF%E4%B8%80%E6%AE%B5%EF%BC%91%EF%BC%96%EF%BC%98%E8%99%9F,+%E5%A4%A7%E6%BA%AA%E4%B8%89%E6%A9%8B%E6%B8%A1%E5%81%87%E6%97%85%E5%BA%97%EF%BC%8D%E6%A1%83%E5%9C%92%E6%B8%A1%E5%81%87%E9%85%92%E5%BA%97%E6%8E%A8%E8%96%A6+%E4%BA%BA%E6%B0%A3%E9%A3%AF%E5%BA%97+%E8%A6%AA%E5%AD%90%E8%87%AA%E7%94%B1%E8%A1%8C+%E5%92%96%E5%95%A1%E5%BB%B3+%E7%A9%BA%E4%B8%AD%E6%99%AF%E8%A7%80%E9%A4%90%E5%BB%B3+%E7%B6%B2%E7%BE%8E%E6%89%93%E5%8D%A1+%E5%95%86%E6%97%85+%E8%A8%82%E6%88%BF%E5%83%B9%E6%A0%BC+%E9%A6%96%E9%81%B8+%E8%A9%95%E5%83%B9+%E7%84%A1%E8%8F%B8%E6%88%BF+%E8%BC%95%E6%97%85%E8%A1%8C+%E5%9C%98%E9%AB%94%E5%84%AA%E6%83%A0+%E5%A4%A7%E6%BA%AA%E6%83%85%E4%BA%BA%E6%A9%8B+%E5%A4%A7%E6%BA%AA%E7%99%BE%E5%B9%B4%E8%80%81%E8%A1%97+%E4%B8%AD%E5%BA%84%E5%90%8A%E6%A9%8B+%E9%BD%8B%E6%98%8E%E5%AF%BA%E5%8F%A4%E9%81%93/data=!4m14!4m13!1m5!1m1!19sChIJRU1SRgUYaDQRTtdqosWQG4s!2m2!1d121.2730895!2d24.891403!1m5!1m1!19sChIJnR3w3OsZaDQRp1zYjDHkLGE!2m2!1d121.27876649999999!2d24.8882987!3e0',
-                                tips: [{ icon: 'fa-solid fa-car', text: '先寄放行李與車輛，輕裝出發。' }]
+                                tips: [{ icon: 'fa-solid fa-car', text: '先寄放行李與車輛。' }]
                             },
                             {
                                 time: '14:00',
@@ -276,10 +319,7 @@
                                 title: '大溪橋 & 木藝博物館',
                                 mapUrl: 'https://www.google.com/maps/dir/%E5%8F%B0%E7%81%A3%E6%A1%83%E5%9C%92%E5%B8%82%E5%A4%A7%E6%BA%AA%E5%8D%80%E7%91%9E%E5%AE%89%E8%B7%AF%E4%B8%80%E6%AE%B5%EF%BC%91%EF%BC%96%EF%BC%98%E8%99%9F,+%E5%A4%A7%E6%BA%AA%E4%B8%89%E6%A9%8B%E6%B8%A1%E5%81%87%E6%97%85%E5%BA%97%EF%BC%8D%E6%A1%83%E5%9C%92%E6%B8%A1%E5%81%87%E9%85%92%E5%BA%97%E6%8E%A8%E8%96%A6+%E4%BA%BA%E6%B0%A3%E9%A3%AF%E5%BA%97+%E8%A6%AA%E5%AD%90%E8%87%AA%E7%94%B1%E8%A1%8C+%E5%92%96%E5%95%A1%E5%BB%B3+%E7%A9%BA%E4%B8%AD%E6%99%AF%E8%A7%80%E9%A4%90%E5%BB%B3+%E7%B6%B2%E7%BE%8E%E6%89%93%E5%8D%A1+%E5%95%86%E6%97%85+%E8%A8%82%E6%88%BF%E5%83%B9%E6%A0%BC+%E9%A6%96%E9%81%B8+%E8%A9%95%E5%83%B9+%E7%84%A1%E8%8F%B8%E6%88%BF+%E8%BC%95%E6%97%85%E8%A1%8C+%E5%9C%98%E9%AB%94%E5%84%AA%E6%83%A0+%E5%A4%A7%E6%BA%AA%E6%83%85%E4%BA%BA%E6%A9%8B+%E5%A4%A7%E6%BA%AA%E7%99%BE%E5%B9%B4%E8%80%81%E8%A1%97+%E4%B8%AD%E5%BA%84%E5%90%8A%E6%A9%8B+%E9%BD%8B%E6%98%8E%E5%AF%BA%E5%8F%A4%E9%81%93/%E5%8F%B0%E6%B9%BE%E6%A1%83%E5%9C%92%E5%B8%82%E5%A4%A7%E6%BA%AA%E5%8D%80%E6%99%AE%E6%BF%9F%E8%B7%AF11%E8%99%9F,+%E8%BE%A6%E5%85%AC%E5%AE%A4,+%E5%BE%8C%E6%A3%9F2%E6%A8%93,+Daxi+Wood+Art+Ecomuseum,+Taoyuan/data=!4m14!4m13!1m5!1m1!19sChIJnR3w3OsZaDQRp1zYjDHkLGE!2m2!1d121.27876649999999!2d24.8882987!1m5!1m1!19sChIJTcY5OiAYaDQRajctdjMUaH0!2m2!1d121.28671709999999!2d24.8807421!3e2',
                                 photoSpot: true,
-                                tips: [
-                                    { icon: 'fa-solid fa-route', text: '步行路線：大溪橋 -> 鳳飛飛故事館 -> 壹號館。' },
-                                    { icon: 'fa-solid fa-camera', text: '推薦：大溪橋巴洛克式牌樓，傍晚點燈超美。' }
-                                ]
+                                tips: [{ icon: 'fa-solid fa-camera', text: '推薦：大溪橋巴洛克式牌樓夜景。' }]
                             },
                             {
                                 time: '17:30',
@@ -302,25 +342,21 @@
                         weekday: '週日',
                         temp: '17°C',
                         weatherIcon: 'fa-solid fa-cloud',
-                        rainProb: '30%',
                         events: [
                             {
                                 time: '10:00',
                                 type: 'sight',
-                                title: '山豬湖生態親水園區',
+                                title: '山豬湖生態園區',
                                 mapUrl: 'https://www.google.com/maps/dir/%E5%8F%B0%E7%81%A3%E6%A1%83%E5%9C%92%E5%B8%82%E5%A4%A7%E6%BA%AA%E5%8D%80%E7%91%9E%E5%AE%89%E8%B7%AF%E4%B8%80%E6%AE%B5%EF%BC%91%EF%BC%96%EF%BC%98%E8%99%9F,+%E5%A4%A7%E6%BA%AA%E4%B8%89%E6%A9%8B%E6%B8%A1%E5%81%87%E6%97%85%E5%BA%97%EF%BC%8D%E6%A1%83%E5%9C%92%E6%B8%A1%E5%81%87%E9%85%92%E5%BA%97%E6%8E%A8%E8%96%A6+%E4%BA%BA%E6%B0%A3%E9%A3%AF%E5%BA%97+%E8%A6%AA%E5%AD%90%E8%87%AA%E7%94%B1%E8%A1%8C+%E5%92%96%E5%95%A1%E5%BB%B3+%E7%A9%BA%E4%B8%AD%E6%99%AF%E8%A7%80%E9%A4%90%E5%BB%B3+%E7%B6%B2%E7%BE%8E%E6%89%93%E5%8D%A1+%E5%95%86%E6%97%85+%E8%A8%82%E6%88%BF%E5%83%B9%E6%A0%BC+%E9%A6%96%E9%81%B8+%E8%A9%95%E5%83%B9+%E7%84%A1%E8%8F%B8%E6%88%BF+%E8%BC%95%E6%97%85%E8%A1%8C+%E5%9C%98%E9%AB%94%E5%84%AA%E6%83%A0+%E5%A4%A7%E6%BA%AA%E6%83%85%E4%BA%BA%E6%A9%8B+%E5%A4%A7%E6%BA%AA%E7%99%BE%E5%B9%B4%E8%80%81%E8%A1%97+%E4%B8%AD%E5%BA%84%E5%90%8A%E6%A9%8B+%E9%BD%8B%E6%98%8E%E5%AF%BA%E5%8F%A4%E9%81%93/%E5%8F%B0%E7%81%A3%E6%A1%83%E5%9C%92%E5%B8%82%E5%A4%A7%E6%BA%AA%E5%8D%80,+%E5%A4%A7%E6%BC%A2%E6%BA%AA%E5%B1%B1%E8%B1%AC%E6%B9%96%E7%94%9F%E6%85%8B%E8%A6%AA%E6%B0%B4%E5%9C%92%E5%8D%80/data=!4m14!4m13!1m5!1m1!19sChIJnR3w3OsZaDQRp1zYjDHkLGE!2m2!1d121.27876649999999!2d24.8882987!1m5!1m1!19sChIJgYuMHPAZaDQRGLuAoxbKEBc!2m2!1d121.3035036!2d24.9037835!3e0',
                                 photoSpot: true,
-                                tips: [
-                                    { icon: 'fa-solid fa-leaf', text: '亮點：中庄吊橋 (白色極簡風，好拍)。' },
-                                    { icon: 'fa-solid fa-shoe-prints', text: '路面平緩，適合長輩散步。' }
-                                ]
+                                tips: [{ icon: 'fa-solid fa-leaf', text: '必拍：中庄吊橋 (白色極簡風)。' }]
                             },
                             {
                                 time: '12:00',
                                 type: 'food',
                                 title: '山豬湖土雞城',
                                 mapUrl: 'https://www.google.com/maps/dir/%E5%8F%B0%E7%81%A3%E6%A1%83%E5%9C%92%E5%B8%82%E5%A4%A7%E6%BA%AA%E5%8D%80,+%E5%A4%A7%E6%BC%A2%E6%BA%AA%E5%B1%B1%E8%B1%AC%E6%B9%96%E7%94%9F%E6%85%8B%E8%A6%AA%E6%B0%B4%E5%9C%92%E5%8D%80/%E5%8F%B0%E7%81%A3%E6%A1%83%E5%9C%92%E5%B8%82%E5%A4%A7%E6%BA%AA%E5%8D%80%E4%BF%A1%E7%BE%A9%E8%B7%AF525%E5%B7%B710%E5%BC%84292%E8%99%9F,+%E5%B1%B1%E8%B1%AC%E6%B9%96%E5%9C%9F%E9%9B%9E%E5%9F%8E/data=!4m14!4m13!1m5!1m1!19sChIJgYuMHPAZaDQRGLuAoxbKEBc!2m2!1d121.3035036!2d24.9037835!1m5!1m1!19sChIJOYmcNjYYaDQRwkpKDy7d1Ho!2m2!1d121.30362819999999!2d24.9008917!3e2',
-                                tips: [{ icon: 'fa-solid fa-thumbs-up', text: '招牌：白斬雞肉質Q彈，野菜新鮮。' }]
+                                tips: [{ icon: 'fa-solid fa-thumbs-up', text: '招牌：白斬雞肉質Q彈。' }]
                             },
                             {
                                 time: '13:30',
@@ -344,7 +380,6 @@
                         weekday: '週一',
                         temp: '19°C',
                         weatherIcon: 'fa-solid fa-sun',
-                        rainProb: '10%',
                         events: [
                             {
                                 time: '10:00',
@@ -359,10 +394,7 @@
                                 title: '巧克力共和國',
                                 mapUrl: '#',
                                 photoSpot: true,
-                                tips: [
-                                    { icon: 'fa-solid fa-gift', text: '必買：工廠限定版77乳加、薄片巧克力。' },
-                                    { icon: 'fa-solid fa-hand-sparkles', text: '親子活動：DIY 巧克力課程 (建議預約)。' }
-                                ]
+                                tips: [{ icon: 'fa-solid fa-gift', text: '必拍：全球最大 77 乳加模型。' }]
                             },
                             {
                                 time: '12:00',
