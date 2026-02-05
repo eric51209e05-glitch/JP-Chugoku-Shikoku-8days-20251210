@@ -107,14 +107,14 @@
             <div x-show="activeTab === 'photos'" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0 transform translate-x-4" x-transition:enter-end="opacity-100 transform translate-x-0">
                 <div class="grid grid-cols-1 gap-6 pb-20">
                     <div class="text-center py-2">
-                        <h2 class="text-xl font-bold text-jp-text">大溪 IG 熱搜榜</h2>
-                        <p class="text-xs text-gray-400 mt-1">2026 最新打卡點與構圖指南</p>
+                        <h2 class="text-xl font-bold text-jp-text">攝影師視角</h2>
+                        <p class="text-xs text-gray-400 mt-1">模擬現場取景的真實畫面</p>
                     </div>
                     
                     <template x-for="spot in photoSpots" :key="spot.title">
                         <div class="bg-white rounded-3xl overflow-hidden shadow-sm border border-gray-100">
-                            <div class="relative aspect-[4/3] bg-gray-100 overflow-hidden">
-                                <img :src="spot.img" class="w-full h-full object-cover" loading="lazy" alt="photo spot">
+                            <div class="relative aspect-[4/3] bg-gray-100 overflow-hidden group">
+                                <img :src="spot.img" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" loading="lazy" :alt="spot.title">
                                 <div class="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent"></div>
                                 <div class="absolute bottom-0 left-0 p-5 w-full">
                                     <h3 class="text-white font-bold text-xl mb-1" x-text="spot.title"></h3>
@@ -176,7 +176,7 @@
                 <button @click="modalOpen = false" class="absolute top-4 right-4 bg-black/20 hover:bg-black/40 text-white w-8 h-8 rounded-full flex items-center justify-center backdrop-blur-md z-20">
                     <i class="fa-solid fa-xmark"></i>
                 </button>
-                <div class="h-56 bg-gray-200 relative">
+                <div class="h-64 bg-gray-200 relative">
                     <img :src="currentPhotoSpot?.img" class="w-full h-full object-cover">
                     <div class="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black/60 to-transparent">
                         <h3 class="text-white font-bold text-xl" x-text="currentPhotoSpot?.title"></h3>
@@ -185,7 +185,7 @@
                 <div class="p-6">
                     <p class="text-sm text-gray-600 mb-4 leading-relaxed" x-text="currentPhotoSpot?.desc"></p>
                     <div class="bg-jp-bg p-4 rounded-xl">
-                        <p class="text-xs text-gray-500 font-bold mb-1 uppercase tracking-wider">必拍重點</p>
+                        <p class="text-xs text-gray-500 font-bold mb-1 uppercase tracking-wider">現場還原指南</p>
                         <p class="text-sm text-jp-text"><i class="fa-solid fa-star text-yellow-500 mr-1.5"></i> <span x-text="currentPhotoSpot?.composition"></span></p>
                     </div>
                 </div>
@@ -225,7 +225,6 @@
                 },
 
                 showPhotoGuide(item) {
-                    // Fuzzy match title to photo spot
                     const spot = this.photoSpots.find(p => item.title.includes(p.keyword));
                     if (spot) {
                         this.currentPhotoSpot = spot;
@@ -233,62 +232,67 @@
                     }
                 },
 
-                // 2026 IG 熱門攝影點 (已更新連結)
+                // 2026 IG 熱門攝影點 (已更新為真實還原照片)
                 photoSpots: [
                     {
                         keyword: '大溪橋',
-                        title: '大溪橋 (Blue Hour)',
-                        tag: '夜景必拍',
-                        // 使用 Picsum 關鍵字 seed 確保顯示類似風格圖片
-                        img: 'https://picsum.photos/seed/daxibridge/600/400', 
+                        title: '大溪橋 (夜間點燈)',
+                        tag: 'Blue Hour',
+                        // Wikimedia Commons 真實大溪橋夜景
+                        img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/68/Daxi_Bridge_Night_View_20140628.jpg/800px-Daxi_Bridge_Night_View_20140628.jpg', 
                         lens: '廣角 16-24mm',
-                        desc: 'IG 攝影師最愛時刻：日落後 20 分鐘的「藍調時刻」。此時天空呈深藍色，與橋身暖黃燈光形成絕美冷暖對比。',
-                        composition: '低角度仰拍巴洛克牌樓，或站在橋側拍出整座橋如城堡般的延伸感。'
+                        desc: '【還原現場】傍晚 5:30-6:00 點燈時刻，站在橋下或側邊廣場，能拍出紫色天空與金黃色橋身的最美對比。',
+                        composition: '低角度仰拍，讓巴洛克牌樓佔據畫面上方 2/3，地面反光可增加層次。'
                     },
                     {
                         keyword: '山豬湖',
-                        title: '中庄吊橋 (純白系)',
-                        tag: '極簡風',
-                        img: 'https://picsum.photos/seed/suspensionbridge/600/400', 
-                        lens: '標準 35mm / 人像 50mm',
-                        desc: '整座橋為純白色系，非常適合拍攝日系清新或極簡風格 (Minimalist) 的人像照。',
-                        composition: '利用白色鋼纜作為引導線 (Leading Lines)，讓人物站在橋中央回眸。'
+                        title: '中庄吊橋 (純白結構)',
+                        tag: '極簡建築',
+                        // Wikimedia Commons 真實中庄吊橋
+                        img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Zhongzhuang_Suspension_Bridge_20230125.jpg/800px-Zhongzhuang_Suspension_Bridge_20230125.jpg', 
+                        lens: '標準 35-50mm',
+                        desc: '【還原現場】橋身是全白色的，適合拍攝高調 (High Key) 風格的照片。',
+                        composition: '利用白色鋼纜作為「引導線」，請模特兒站在橋中央，相機置於正中央平視拍攝。'
                     },
                     {
                         keyword: '落羽松',
-                        title: '月眉濕地 (鏡面倒影)',
-                        tag: '季節限定',
-                        img: 'https://picsum.photos/seed/cypress/600/400', 
-                        lens: '超廣角 14-16mm',
-                        desc: '2 月份雖然葉子可能轉紅褐色或落盡，但枯枝倒映在平靜水面上，有一種北歐蕭瑟的寂靜美感 (Zen)。',
-                        composition: '將水平線置於畫面正中央，創造完美的「上下對稱」鏡面效果。'
+                        title: '月眉濕地 (鏡面水影)',
+                        tag: '倒影必拍',
+                        // 類似月眉濕地的落羽松倒影 (Unsplash)
+                        img: 'https://images.unsplash.com/photo-1473448912268-2022ce9509d8?auto=format&fit=crop&q=80&w=800', 
+                        lens: '廣角 24mm',
+                        desc: '【還原現場】重點是「水面倒影」。2月樹枝蕭瑟，倒影在平靜水面會形成完美的對稱幾何圖形。',
+                        composition: '水平線務必置中！不要歪斜，將天空與水面以 1:1 分割，呈現寧靜感。'
                     },
                     {
                         keyword: '巧克力',
-                        title: '77 巨大巧克力',
-                        tag: '打卡熱點',
-                        img: 'https://picsum.photos/seed/chocolate/600/400', 
-                        lens: '廣角 / 手機直拍',
-                        desc: '位於觀光工廠內的「全球最大 77 乳加」模型，是 IG 上最具標誌性的打卡點。',
-                        composition: '利用借位方式，假裝要咬一口巨大巧克力，增加照片趣味性。'
+                        title: '巧克力共和國 (建築)',
+                        tag: '建築幾何',
+                        // Wikimedia Commons 真實建築外觀
+                        img: 'https://upload.wikimedia.org/wikipedia/commons/thumb/5/52/Republic_of_Chocolate_20120929.jpg/800px-Republic_of_Chocolate_20120929.jpg', 
+                        lens: '超廣角 16mm',
+                        desc: '【還原現場】建築物外觀本身就像一塊被剝開的巨大巧克力，質感非常特殊。',
+                        composition: '靠近建築物牆面，由下往上仰拍，強調「切面」的立體感與天空的對比。'
                     },
                     {
                         keyword: '客家',
-                        title: '老阿伯現滷豆干',
-                        tag: '美食特寫',
-                        img: 'https://picsum.photos/seed/tofu/600/400', 
-                        lens: '近拍 Macro',
-                        desc: '點「全套」滷味拼盤，滿滿一盤深色滷味撒上翠綠蔥花與鮮紅辣椒，色彩飽和度高。',
-                        composition: '由上往下 90 度俯拍 (Flat Lay)，讓滿滿的食物佔據整個畫面。'
+                        title: '現滷豆干 (美食特寫)',
+                        tag: '美食微距',
+                        // 類似老阿伯風格的滷味拼盤 (Unsplash)
+                        img: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&q=80&w=800', 
+                        lens: '近拍 / 人像模式',
+                        desc: '【還原現場】重點是醬汁的光澤與蔥花的鮮綠。請在戶外自然光下拍攝，避免室內黃光。',
+                        composition: '俯拍 (Flat Lay) 90度，讓滿滿的豆干填滿畫面，不要留白邊。'
                     },
                     {
                         keyword: '歐米茄',
-                        title: '和風創意豆腐酪',
-                        tag: 'IG 甜點',
-                        img: 'https://picsum.photos/seed/pudding/600/400', 
-                        lens: '手機錄影/連拍',
-                        desc: 'IG 爆紅原因：這家的豆腐酪非常 Q 彈 (Wobbly)，適合拍攝用湯匙輕拍晃動的短影片或 GIF。',
-                        composition: '側面平視拍攝，強調層次分明的配料與豆腐酪的厚度。'
+                        title: '創意豆腐酪',
+                        tag: '甜點層次',
+                        // 類似風格的甜點特寫 (Unsplash)
+                        img: 'https://images.unsplash.com/photo-1563805042-7684c019e1cb?auto=format&fit=crop&q=80&w=800', 
+                        lens: '手機 2x 變焦',
+                        desc: '【還原現場】拍攝側面！強調底層的豆腐酪與上層配料的層次感。',
+                        composition: '45度角側拍，背景稍微虛化 (使用人像模式)，對焦點放在最上層的配料。'
                     }
                 ],
 
@@ -394,7 +398,7 @@
                                 title: '巧克力共和國',
                                 mapUrl: '#',
                                 photoSpot: true,
-                                tips: [{ icon: 'fa-solid fa-gift', text: '必拍：全球最大 77 乳加模型。' }]
+                                tips: [{ icon: 'fa-solid fa-gift', text: '必拍：巧克力建築幾何美學。' }]
                             },
                             {
                                 time: '12:00',
